@@ -11,9 +11,6 @@ import BusinessManagementLayout from "./components/layout/BusinessManagementLayo
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard/Dashboard"
 
-import InspectionChecklist from "./pages/Inspection/InspectionChecklist"
-import InspectionChecklistRegister from "./pages/Inspection/InspectionChecklistRegister"
-import InspectionPlan from "./pages/Inspection/InspectionPlan"
 import InspectionPlanRegister from "./pages/Inspection/InspectionPlanRegister"
 import InspectionExecute from "./pages/Inspection/InspectionExecute"
 import InspectionResults from "./pages/Inspection/InspectionResults"
@@ -108,14 +105,11 @@ return (
 <Route path="/" element={<Navigate to="/dashboard" replace />} />
 <Route path="/dashboard" element={<Dashboard />} />
 
-<Route path="/inspection" element={<Navigate to="/inspection/plan" replace />} />
-<Route path="/inspection/plan" element={<InspectionPlan />} />
-<Route path="/inspection/plan/register" element={<InspectionPlanRegister />} />
-<Route path="/inspection/checklist" element={<InspectionChecklist />} />
-<Route path="/inspection/checklist/register" element={<InspectionChecklistRegister />} />
-<Route path="/inspection/plan/:planId/execute" element={<InspectionExecute />} />
+<Route path="/inspection" element={<InspectionResults />} />
 <Route path="/inspection/results" element={<InspectionResults />} />
 <Route path="/inspection/results/:resultId" element={<InspectionResultDetail />} />
+<Route path="/inspection/plan/register" element={<InspectionPlanRegister />} />
+<Route path="/inspection/plan/:planId/execute" element={<InspectionExecute />} />
 
 <Route path="/tbm" element={<TBM />} />
 <Route path="/tbm/register" element={<TBMRegister />} />
