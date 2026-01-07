@@ -1,4 +1,3 @@
-import { PTWGroupItem, WorkPermitItem, JSAItem, SiteEvaluationItem, TBMItem, PTWDocumentType } from "@/types/ptw"
 import { DataRow } from "@/components/common/tables/DataTable"
 
 // 랜덤 현장사진 생성 (3~6장)
@@ -13,38 +12,6 @@ const getRandomPhotos = (seed: number): string[] => {
 export type ChecklistTemplate = { id: number; name: string; items: string[] }
 
 
-// PTW
-export const ptwGroupMockData: PTWGroupItem[] = [
-  { id: 1, ptwName: "Master Roller 어큐뮬레이터 교체 패키지", createdAt: "2025-10-28(화)", registrant: "최승휴", updatedAt: "2025-10-28(화)" },
-  { id: 2, ptwName: "소형밀 내부 점검 및 오일 작업 패키지", createdAt: "2025-10-26(일)", registrant: "문반장", updatedAt: "2025-10-27(월)" },
-  { id: 3, ptwName: "10월 설비 LOTOTO 필수 작업 패키지", createdAt: "2025-10-25(토)", registrant: "양강현", updatedAt: "2025-10-29(수)" },
-  { id: 4, ptwName: "인렛 슈트 코팅 제거 일일 패키지", createdAt: "2025-10-27(월)", registrant: "이호성", updatedAt: "2025-10-27(월)" },
-  { id: 5, ptwName: "11월 유압 시스템 긴급 점검 패키지", createdAt: "2025-11-20(목)", registrant: "최정비", updatedAt: "2025-11-25(화)" },
-  { id: 6, ptwName: "12월 슬래그 밀 정기 정비 패키지", createdAt: "2025-12-01(월)", registrant: "홍길동", updatedAt: "2025-12-05(금)" }
-
-]
-export const workPermitMockData: WorkPermitItem[] = [
-  { id: 1, workName: "밀 실 주변 전기 배선 절연 보강 작업", workDate: "2025-12-03(화)", workLocation: "Slag Mill 실 전기실", workPersonnel: "2명", workType: "전기, 고소", applicant: "(주)전기안전/김민수", applicationDate: "2025-12-01(일)", signatureStatus: { text: "1/4", color: "red" }, sitePhotos: getRandomPhotos(1), fileAttach: false },
-  { id: 2, workName: "컨베이어 벨트 교체 용접 작업", workDate: "2025-12-01(월)", workLocation: "Slag Mill 실 주변", workPersonnel: "3명", workType: "화기, LOTOTO", applicant: "(주)건설/김철수", applicationDate: "2025-11-29(토)", signatureStatus: { text: "4/4", color: "blue" }, sitePhotos: getRandomPhotos(2), fileAttach: true },
-  { id: 3, workName: "HSLM 유압 오일 보충 및 라인 점검", workDate: "2025-12-12(목)", workLocation: "Slag Mill 실 유압장치", workPersonnel: "2명", workType: "LOTOTO, 고압", applicant: "(주)관리팀/이정아", applicationDate: "2025-12-10(화)", signatureStatus: { text: "3/4", color: "red" }, sitePhotos: getRandomPhotos(3), fileAttach: true },
-  { id: 4, workName: "소형밀 내부 잔류물 긁어내기 및 청소", workDate: "2025-12-13(금)", workLocation: "소형밀 실", workPersonnel: "2명", workType: "밀폐공간, 분진", applicant: "(주)생산협력/문반장", applicationDate: "2025-12-11(수)", signatureStatus: { text: "4/4", color: "blue" }, sitePhotos: getRandomPhotos(4), fileAttach: false },
-  { id: 5, workName: "Master Roller 어큐뮬레이터 교체 작업", workDate: "2025-12-17(화)", workLocation: "Slag Mill 실 Roller 구역", workPersonnel: "3명", workType: "고소, 중량물", applicant: "(주)보전서비스/최정비", applicationDate: "2025-12-15(일)", signatureStatus: { text: "4/4", color: "blue" }, sitePhotos: getRandomPhotos(5), fileAttach: true },
-  { id: 6, workName: "슬래그 밀 내부 인렛 슈트 코팅 제거", workDate: "2025-12-10(화)", workLocation: "Slag Mill 실 내부", workPersonnel: "2명", workType: "밀폐공간", applicant: "(주)엔지니어링/박현우", applicationDate: "2025-12-08(일)", signatureStatus: { text: "2/4", color: "red" }, sitePhotos: getRandomPhotos(6), fileAttach: true }
-]
-
-export const jsaMockData: JSAItem[] = [
-  { id: 1, jsaNo: "SPS&A-JSA-001", workName: "컨베이어 벨트 교체 및 LOTOTO 점검", workDate: "2025-12-01(월)", team: "설비보전팀", applicationDate: "2025-11-28(금)", sitePhotos: getRandomPhotos(11), fileAttach: true },
-  { id: 2, jsaNo: "SPS&A-JSA-002", workName: "밀 실 주변 전기 배선 절연 보강", workDate: "2025-12-03(화)", team: "전기팀", applicationDate: "2025-12-01(일)", sitePhotos: getRandomPhotos(12), fileAttach: false },
-  { id: 3, jsaNo: "SPS&A-JSA-003", workName: "소형밀 내부 잔류물 긁어내기 및 청소", workDate: "2025-12-13(금)", team: "생산지원팀", applicationDate: "2025-12-11(수)", sitePhotos: getRandomPhotos(13), fileAttach: true },
-  { id: 4, jsaNo: "SPS&A-JSA-004", workName: "HSLM 유압 오일 보충 및 라인 점검", workDate: "2025-12-12(목)", team: "설비보전팀", applicationDate: "2025-12-10(화)", sitePhotos: getRandomPhotos(14), fileAttach: true },
-  { id: 5, jsaNo: "SPS&A-JSA-005", workName: "Master Roller 어큐뮬레이터 교체", workDate: "2025-12-17(화)", team: "협력사(보전)", applicationDate: "2025-12-15(일)", sitePhotos: getRandomPhotos(15), fileAttach: true },
-  { id: 6, jsaNo: "SPS&A-JSA-006", workName: "슬래그 밀 내부 인렛 슈트 코팅 제거", workDate: "2025-12-10(화)", team: "생산지원팀", applicationDate: "2025-12-08(일)", sitePhotos: getRandomPhotos(16), fileAttach: true },
-  { id: 7, jsaNo: "SPS&A-JSA-007", workName: "유압 라인 고압/고온 작업 위험 분석", workDate: "2025-12-11(수)", team: "설비보전팀", applicationDate: "2025-12-09(월)", sitePhotos: getRandomPhotos(17), fileAttach: false },
-  { id: 8, jsaNo: "SPS&A-JSA-008", workName: "중량물 운반 2인 1조 준수 점검", workDate: "2025-12-04(수)", team: "안전팀", applicationDate: "2025-12-02(월)", sitePhotos: getRandomPhotos(18), fileAttach: false },
-  { id: 9, jsaNo: "SPS&A-JSA-009", workName: "밀 실 주변 협소/고소 작업 안전 수칙 점검", workDate: "2025-12-19(목)", team: "안전팀", applicationDate: "2025-12-17(화)", sitePhotos: getRandomPhotos(19), fileAttach: false }
-]
-
-
 export const checklistTemplateMockData: ChecklistTemplate[] = [
   { id: 1, name: "공통필수확인(작업전)", items: ["[TBM] 작업 전 위험요인 및 대책 공유가 완료되었는가?", "[TBM] 작업자 전원의 건강 상태(음주, 피로 등)를 확인했는가?", "[필수 보호구 착용] 안전모, 안전화, 보안경 착용 완료여부", "[필수 보호구 착용] 방진마스크 (분진 발생 구역 등급 확인) 및 귀마개 착용여부", "[작업허가서 승인] 화기 / 밀폐공간 / 고소 / 중장비 작업 허가 승인을 득하였는가?", "[LOTOTO 관리] 정비 대상 설비의 동력(전기) 차단 및 잠금 장치를 체결했는가?", "[LOTOTO 관리] 조작 금지 표지판(Tag)을 부착했는가?", "[2인1조 원칙] 단독 작업을 금지하고, 감시인 또는 동료 작업자가 배치되었는가?"] },
   { id: 2, name: "설비 정비 및 기계 안전", items: ["[잔압 제거] 유압/공압 라인 분해 전, 압력 게이지가 \"0\" Bar임을 확인했는가?", "[잔압 제거] 어큐뮬레이터(축압기) 내부 압력을 완전히 제거했는가?", "[고압 가스 취급] 고압 가스 충전용 호스 및 레귤레이터 상태는 양호한가?", "[고압 가스 취급] 가스 용기는 전도되지 않도록 체인 등으로 고정되어 있는가?", "[협착 및 끼임 방지] 시운전 시 회전체 반경 내 접근 금지 조치가 되어 있는가?", "[협착 및 끼임 방지] 정비 중 불시 가동을 방지할 물리적 조치가 확실한가?", "[화상 및 누유 방지] 고온의 오일/설비 접촉 방지를 위해 충분히 냉각되었는가?", "[화상 및 누유 방지] 오일 드레인(Drain) 시 바닥 오염 및 미끄럼 방지(흡착포) 조치를 했는가?"] },
@@ -56,29 +23,6 @@ export const checklistTemplateMockData: ChecklistTemplate[] = [
   { id: 8, name: "외부공간 점검표", items: ["조경수, 잔디, 가로수 관리 상태", "휴게시설, 의자, 파고라 관리상태", "벤치, 운동기구, 체육시설 관리상태", "조명시설 작동 여부", "CCTV 작동 여부", "보행로 균열, 파손 여부", "배수로 막힘 여부", "기타 안전시설 관리 상태"] },
   { id: 9, name: "어린이놀이시설 및 체육시설 점검표", items: ["놀이기구 설치기준 충족 여부", "부품 탈락 여부", "충돌 방지 매트 상태", "볼트, 너트 풀림 여부", "표시사항 부착 여부", "철제시설 녹 발생 여부", "기초 콘크리트 균열 여부", "안전펜스 설치 상태", "놀이시설 관리대장 작성 여부"] },
   { id: 10, name: "소방/전기/승강기 점검표", items: ["소화전 압력 정상 여부", "소화펌프 작동 여부", "스프링클러 작동 여부", "비상발전기 작동 여부", "누전차단기 정상 동작 여부", "분전반 차단기 접속상태 양호 여부", "승강기 비상벨 작동 여부", "승강기 안전센서 작동 여부", "승강기 정지층 정확성 여부", "승강기 표기 부착 상태"] }
-]
-
-export const siteEvaluationMockData: SiteEvaluationItem[] = [
-  { id: 1, workTeam: "자체(생산지원)", workerName: "이호성", workDate: "2025-12-02", author: "김감독", signatureStatus: { text: "완료", color: "blue" }, sitePhotos: getRandomPhotos(21), fileAttach: true },
-  { id: 2, workTeam: "자체(설비보전)", workerName: "최승휴", workDate: "2025-12-05", author: "박안전", signatureStatus: { text: "완료", color: "blue" }, sitePhotos: getRandomPhotos(22), fileAttach: true },
-  { id: 3, workTeam: "협력사(전기)", workerName: "김민수", workDate: "2025-12-03", author: "최감독", signatureStatus: { text: "미완료", color: "red" }, sitePhotos: getRandomPhotos(23), fileAttach: false },
-  { id: 4, workTeam: "자체(생산지원)", workerName: "양강현", workDate: "2025-12-10", author: "정관리", signatureStatus: { text: "완료", color: "blue" }, sitePhotos: getRandomPhotos(24), fileAttach: true },
-  { id: 5, workTeam: "협력사(보전)", workerName: "최정비", workDate: "2025-12-17", author: "문감독", signatureStatus: { text: "완료", color: "blue" }, sitePhotos: getRandomPhotos(25), fileAttach: true },
-  { id: 6, workTeam: "자체(생산지원)", workerName: "이호성", workDate: "2025-12-13", author: "배안전", signatureStatus: { text: "미완료", color: "red" }, sitePhotos: getRandomPhotos(26), fileAttach: false },
-  { id: 7, workTeam: "협력사(엔지니어링)", workerName: "박현우", workDate: "2025-12-12", author: "김안전", signatureStatus: { text: "완료", color: "blue" }, sitePhotos: getRandomPhotos(27), fileAttach: true },
-  { id: 8, workTeam: "자체(설비보전)", workerName: "최승휴", workDate: "2025-12-09", author: "오관리", signatureStatus: { text: "완료", color: "blue" }, sitePhotos: getRandomPhotos(28), fileAttach: false },
-  { id: 9, workTeam: "자체(안전팀)", workerName: "정안전", workDate: "2025-12-19", author: "홍감독", signatureStatus: { text: "미완료", color: "red" }, sitePhotos: getRandomPhotos(29), fileAttach: true }
-]
-
-export const tbmMockData: TBMItem[] = [
-  { id: 1, processName: "인렛슈트 코팅 제거 작업 TBM", meetingDate: "2025-12-10(화)", meetingTime: "08:30~09:00", manager: "이호성", participants: "2명", sitePhotos: getRandomPhotos(31), fileAttach: true },
-  { id: 2, processName: "소형밀 내부 점검 및 오일 주입 TBM", meetingDate: "2025-12-13(금)", meetingTime: "08:40~09:10", manager: "문반장", participants: "3명", sitePhotos: getRandomPhotos(32), fileAttach: false },
-  { id: 3, processName: "Master Roller 어큐뮬레이터 교체 TBM", meetingDate: "2025-12-17(화)", meetingTime: "13:00~13:30", manager: "최승휴", participants: "4명", sitePhotos: getRandomPhotos(33), fileAttach: true },
-  { id: 4, processName: "HSLM 오일 보충 작업 TBM", meetingDate: "2025-12-12(목)", meetingTime: "14:00~14:30", manager: "양강현", participants: "2명", sitePhotos: getRandomPhotos(34), fileAttach: true },
-  { id: 5, processName: "컨베이어 벨트 교체 작업 TBM", meetingDate: "2025-12-01(월)", meetingTime: "07:30~08:00", manager: "김철수", participants: "5명", sitePhotos: getRandomPhotos(35), fileAttach: true },
-  { id: 6, processName: "밀 실 주변 전기 배선 절연 보강 TBM", meetingDate: "2025-12-03(화)", meetingTime: "10:00~10:20", manager: "김민수", participants: "2명", sitePhotos: getRandomPhotos(36), fileAttach: false },
-  { id: 7, processName: "유압 라인 고압/고온 작업 TBM", meetingDate: "2025-12-11(수)", meetingTime: "09:30~10:00", manager: "오감독", participants: "3명", sitePhotos: getRandomPhotos(37), fileAttach: true },
-  { id: 8, processName: "중량물 운반 및 양중 안전 TBM", meetingDate: "2025-12-04(수)", meetingTime: "08:00~08:30", manager: "장감독", participants: "4명", sitePhotos: getRandomPhotos(38), fileAttach: false }
 ]
 
 export const inspectionPlanMockData: DataRow[] = [
@@ -304,21 +248,5 @@ export const qrManagementMockData = [
   { id: 2, qrName: "관리자 페이지 접속 QR", link: "관리자용 웹페이지 링크", useStatus: true },
   { id: 1, qrName: "이수증 제출 QR", link: "안드로이드/iOS 다운로드 링크", useStatus: true }
 ]
-
-// PTW Utilities
-export const findPTWDataById = (id: number, type: PTWDocumentType): PTWGroupItem | WorkPermitItem | JSAItem | SiteEvaluationItem | TBMItem | undefined => {
-  const dataMap = { "ptw-group": ptwGroupMockData, "work-permit": workPermitMockData, "jsa": jsaMockData, "site-evaluation": siteEvaluationMockData, "tbm": tbmMockData }
-  return dataMap[type].find(item => item.id === id)
-}
-
-export const getDocumentTypeByTabIndex = (tabIndex: number): PTWDocumentType => {
-  const typeMap: Record<number, PTWDocumentType> = { 0: "work-permit", 1: "jsa", 2: "site-evaluation", 3: "tbm" }
-  return typeMap[tabIndex] || "work-permit"
-}
-
-export const getTabIndexByDocumentType = (type: PTWDocumentType): number => {
-  const indexMap: Record<PTWDocumentType, number> = { "ptw-group": 0, "work-permit": 0, "jsa": 1, "site-evaluation": 2, "tbm": 3 }
-  return indexMap[type] || 0
-}
 
 export { reportManagementMockData, reportContractorMockData } from "./mockReportData"

@@ -7,7 +7,6 @@ import Header from "../layout/Header"
 const MainLayout:React.FC=()=>{
 const location=useLocation()
 const isDashboard=location.pathname==="/"||location.pathname==="/dashboard"
-const isPTWManage=location.pathname.includes("/ptw")&&location.pathname.includes("/manage")
 const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
 return(
@@ -37,7 +36,7 @@ className="main-layout-content"
 <Breadcrumb/>
 <div
 style={
-isDashboard||isPTWManage
+isDashboard
 ?{flex:1,maxWidth:"100%",width:"100%",margin:"0 auto"}
 :{background:"#fff",borderRadius:12,padding:"2rem",boxSizing:"border-box",flex:1,maxWidth:"100%",width:"100%",margin:"0 auto",boxShadow:"0 0 3px rgb(0 0 0 / 0.01)"}
 }

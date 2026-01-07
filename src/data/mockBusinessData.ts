@@ -20,18 +20,14 @@ export interface DocumentApprovalSetting {
 }
 
 export const documentApprovalSettingsMockData: DocumentApprovalSetting[] = [
-  { id: 1, approvalType: "위험작업허가서", useApproval: false, approvalLineId: null },
-  { id: 2, approvalType: "작업위험분석(JSA)", useApproval: false, approvalLineId: null },
-  { id: 3, approvalType: "현장 위험성평가", useApproval: false, approvalLineId: null },
-  { id: 4, approvalType: "TBM(PTW)", useApproval: false, approvalLineId: null },
-  { id: 5, approvalType: "위험성평가", useApproval: true, approvalLineId: 1 },
-  { id: 6, approvalType: "TBM", useApproval: true, approvalLineId: 3 },
-  { id: 7, approvalType: "안전보건교육", useApproval: true, approvalLineId: 4 },
-  { id: 8, approvalType: "안전점검", useApproval: true, approvalLineId: 1 },
-  { id: 9, approvalType: "작업중지요청", useApproval: false, approvalLineId: null },
-  { id: 10, approvalType: "경영방침", useApproval: true, approvalLineId: 1 },
-  { id: 11, approvalType: "안전보건 목표 및 추진계획", useApproval: true, approvalLineId: 1 },
-  { id: 12, approvalType: "안전보건예산", useApproval: true, approvalLineId: 1 }
+  { id: 1, approvalType: "위험성평가", useApproval: true, approvalLineId: 1 },
+  { id: 2, approvalType: "TBM", useApproval: true, approvalLineId: 3 },
+  { id: 3, approvalType: "안전보건교육", useApproval: true, approvalLineId: 4 },
+  { id: 4, approvalType: "안전점검", useApproval: true, approvalLineId: 1 },
+  { id: 5, approvalType: "작업중지요청", useApproval: false, approvalLineId: null },
+  { id: 6, approvalType: "경영방침", useApproval: true, approvalLineId: 1 },
+  { id: 7, approvalType: "안전보건 목표 및 추진계획", useApproval: true, approvalLineId: 1 },
+  { id: 8, approvalType: "안전보건예산", useApproval: true, approvalLineId: 1 }
 ]
 
 export const orgTreeMockData: OrgNode[] = [
@@ -149,8 +145,7 @@ export const budgetMockData: DataRow[] = [
   { id: 1, year: "2026", itemName: "슬래그 밀 정비 특화 안전 장비 구입", category: "밀폐/고소 작업 안전 장비 확보", budget: "50000000", spent: "3000000", remaining: "47000000", carryOver: true, attachment: "장비목록.pdf", author: "김안전", entryDate: "2025-12-01" },
   { id: 2, year: "2025", itemName: "유압 설비 안전 진단 용역", category: "유압 라인 및 어큐뮬레이터 정기 점검", budget: "30000000", spent: "28000000", remaining: "2000000", carryOver: false, attachment: "용역계약서.pdf", author: "이설비", entryDate: "2025-01-15" },
   { id: 3, year: "2025", itemName: "중대재해 비상 대응 훈련 (4분기)", category: "가상 시나리오 기반 전사 훈련", budget: "25000000", spent: "25000000", remaining: "0", carryOver: false, attachment: "훈련보고서.pdf", author: "박교육", entryDate: "2025-10-01" },
-  { id: 4, year: "2026", itemName: "위험 작업 허가 시스템 개발 및 유지보수", category: "PTW/JSA 전산화 시스템 구축", budget: "60000000", spent: "0", remaining: "60000000", carryOver: true, attachment: "개발계획.pdf", author: "최장비", entryDate: "2025-12-15" },
-  { id: 5, year: "2025", itemName: "협력업체 안전보건 컨설팅 비용", category: "협력업체 위험성평가 및 교육 지원", budget: "15000000", spent: "15000000", remaining: "0", carryOver: false, attachment: "컨설팅계약.pdf", author: "정안전", entryDate: "2025-03-20" }
+  { id: 4, year: "2025", itemName: "협력업체 안전보건 컨설팅 비용", category: "협력업체 위험성평가 및 교육 지원", budget: "15000000", spent: "15000000", remaining: "0", carryOver: false, attachment: "컨설팅계약.pdf", author: "정안전", entryDate: "2025-03-20" }
 ]
 
 export interface AttendeeGroup {

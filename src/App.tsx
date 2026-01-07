@@ -19,18 +19,6 @@ import InspectionExecute from "./pages/Inspection/InspectionExecute"
 import InspectionResults from "./pages/Inspection/InspectionResults"
 import InspectionResultDetail from "./pages/Inspection/InspectionResultDetail"
 
-import PTWRegister from "./pages/PTW/PTWRegister"
-import PTWManage from "./pages/PTW/PTWManage"
-import PTWList from "./pages/PTW/list/PTWList"
-import PTWWorkPermitList from "./pages/PTW/list/PTWWorkPermitList"
-import PTWJSAList from "./pages/PTW/list/PTWJSAList"
-import PTWSiteEvaluationList from "./pages/PTW/list/PTWSiteEvaluationList"
-import PTWTBMList from "./pages/PTW/list/PTWTBMList"
-import PTWWorkPermit from "./pages/PTW/forms/PTWWorkPermit"
-import PTWJSA from "./pages/PTW/forms/PTWJSA"
-import PTWSiteEvaluation from "./pages/PTW/forms/PTWSiteEvaluation"
-import PTWTBM from "./pages/PTW/forms/PTWTBM"
-
 import TBM from "./pages/TBM/TBM"
 import TBMRegister from "./pages/TBM/TBMRegister"
 
@@ -128,15 +116,6 @@ return (
 <Route path="/inspection/plan/:planId/execute" element={<InspectionExecute />} />
 <Route path="/inspection/results" element={<InspectionResults />} />
 <Route path="/inspection/results/:resultId" element={<InspectionResultDetail />} />
-
-<Route path="/ptw" element={<Navigate to="/ptw/list" replace />} />
-<Route path="/ptw/list" element={<PTWList />} />
-<Route path="/ptw/work-permit" element={<PTWWorkPermitList />} />
-<Route path="/ptw/jsa" element={<PTWJSAList />} />
-<Route path="/ptw/site-evaluation" element={<PTWSiteEvaluationList />} />
-<Route path="/ptw/tbm" element={<PTWTBMList />} />
-<Route path="/ptw/register" element={<PTWRegister />} />
-<Route path="/ptw/manage" element={<PTWManage />} />
 
 <Route path="/tbm" element={<TBM />} />
 <Route path="/tbm/register" element={<TBMRegister />} />

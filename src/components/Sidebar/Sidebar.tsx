@@ -18,7 +18,6 @@ onClose?:()=>void
 
 const safetySubMenu:MenuItem[]=[
 {label:"위험성평가",path:"/risk-assessment",Icon:ShieldCheckIcon},
-{label:"안전작업허가",path:"/ptw",Icon:ClipboardDocumentIcon},
 {label:"안전교육관리",path:"/safety-education",Icon:BookOpenIcon},
 {label:"점검표",path:"/inspection",Icon:ListBulletIcon},
 {label:"자산관리",path:"/asset-management",Icon:ArchiveBoxIcon},

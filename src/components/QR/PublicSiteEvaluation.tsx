@@ -5,8 +5,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import Button from "@/components/common/base/Button"
 import { ClipboardCheck, Send, Plus, X, CheckCircle } from "lucide-react"
-import SignatureSelector from "@/pages/PTW/SignatureModule/SignatureSelector"
-import { SignatureInfo } from "@/pages/PTW/SignatureModule/types"
 
 interface RiskRow { id: number; task: string; hazard: string; currentRisk: string; measure: string; checked: boolean }
 interface InspectionRow { id: number; time: string; person: string; note: string }
@@ -21,7 +19,7 @@ export default function PublicSiteEvaluation() {
 const navigate = useNavigate()
 const [isSubmitted, setIsSubmitted] = useState(false)
 const [isSubmitting, setIsSubmitting] = useState(false)
-const [formData, setFormData] = useState<{ teamName: string; signDate: string; teamMember?: SignatureInfo; safetyChecks: Record<string, string | boolean> }>({ teamName: "", signDate: "", safetyChecks: {} })
+const [formData, setFormData] = useState<{ teamName: string; signDate: string; authorName: string; safetyChecks: Record<string, string | boolean> }>({ teamName: "", signDate: "", authorName: "", safetyChecks: {} })
 const [riskRows, setRiskRows] = useState<RiskRow[]>(Array.from({ length: 3 }, (_, i) => ({ id: i + 1, task: "", hazard: "", currentRisk: "", measure: "", checked: false })))
 const [inspectionRows, setInspectionRows] = useState<InspectionRow[]>(Array.from({ length: 2 }, (_, i) => ({ id: i + 1, time: "", person: "", note: "" })))
 
@@ -75,8 +73,8 @@ return (
 <div><label className="text-[10px] text-gray-500 mb-1 block">작업팀(업체) *</label><Input value={formData.teamName} onChange={e => updateFormData({ teamName: e.target.value })} className="w-full h-9 text-xs" placeholder="업체명" /></div>
 </div>
 <div className="mt-3">
-<label className="text-[10px] text-gray-500 mb-1 block">작성자 서명</label>
-<SignatureSelector value={formData.teamMember} onChange={person => updateFormData({ teamMember: person })} />
+<label className="text-[10px] text-gray-500 mb-1 block">작성자명</label>
+<Input value={formData.authorName} onChange={e => updateFormData({ authorName: e.target.value })} className="w-full h-9 text-xs" placeholder="작성자명" />
 </div>
 </div>
 
