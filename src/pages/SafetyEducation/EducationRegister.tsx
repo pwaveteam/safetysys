@@ -5,15 +5,14 @@ import Button from"@/components/common/base/Button"
 import FormScreen,{Field}from"@/components/common/forms/FormScreen"
 import ToggleSwitch from"@/components/common/base/ToggleSwitch"
 import PageTitle from"@/components/common/base/PageTitle"
-import CertificatePanel from"@/components/snippet/CertificatePanel"
+import AttendeePanel from"@/components/snippet/AttendeePanel"
 import LoadListDialog from"@/components/dialog/LoadListDialog"
 import ApprovalConfirmDialog from"@/components/dialog/ApprovalConfirmDialog"
 import{X}from"lucide-react"
-import useHandlers from"@/hooks/useHandlers"
 import useForm,{ValidationRules}from"@/hooks/useForm"
 import useApproval from"@/hooks/useApproval"
 
-interface Attendee{name:string;phone:string;signature?:string}
+interface NotificationTarget{name:string;phone:string;group?:string}
 
 const riskEvaluationTemplates=["건설기계_2025-03-30","물리적인자_2025-03-30","터널 공사_2025-03-30","기타_2025-03-30","크레인 작업_2025-03-30"]
 
@@ -43,7 +42,7 @@ const navigate=useNavigate()
 const location=useLocation()
 const isEdit=location.state?.mode==="edit"
 
-const[attendees,setAttendees]=useState<Attendee[]>([])
+const[notificationTargets,setNotificationTargets]=useState<NotificationTarget[]>([])
 const[notify,setNotify]=useState(true)
 const[riskModalOpen,setRiskModalOpen]=useState(false)
 
@@ -266,22 +265,6 @@ required:false
 }
 ]
 
-const doSave=()=>{
-console.log("저장 데이터:",{...formData,notify},attendees)
-navigate("/safety-education")
-}
-
-const handleSave=()=>{
-if(!validateForm(valuesForForm))return
-checkAndSave(doSave,formData.eduName)
-}
-
-const handleAddAttendee=(att:Attendee)=>setAttendees(prev=>[...prev,att])
-const handleRemoveAttendee=(idx:number)=>setAttendees(prev=>prev.filter((_,i)=>i!==idx))
-
-if(!isEdit){
-}
-
 const valuesForForm:{[key:string]:string}={
 category:formData.category,
 course:formData.course,
@@ -303,11 +286,25 @@ notifyWhen:formData.notifyWhen,
 linkedRiskAssessment:formData.linkedRiskAssessment
 }
 
+const doSave=()=>{
+console.log("저장 데이터:",{...formData,notify},notificationTargets)
+navigate("/safety-education")
+}
+
+const handleSave=()=>{
+if(!validateForm(valuesForForm))return
+checkAndSave(doSave,formData.eduName)
+}
+
+const handleAddTarget=(t:NotificationTarget)=>setNotificationTargets(prev=>[...prev,t])
+const handleRemoveTarget=(idx:number)=>setNotificationTargets(prev=>prev.filter((_,i)=>i!==idx))
+const handleAddMultiple=(ts:NotificationTarget[])=>setNotificationTargets(prev=>[...prev,...ts])
+
 return(
 <section className="w-full relative"style={{minHeight:"900px",paddingBottom:"200px"}}>
 <PageTitle>안전보건교육 {isEdit?"편집":"등록"}</PageTitle>
 <div className="flex flex-col lg:flex-row gap-4 items-start">
-<div className="w-full lg:w-[45%] border border-[#F3F3F3] rounded-[16px] p-3"style={{minHeight:"700px"}}>
+<div className="w-full lg:flex-[6] border border-[#F3F3F3] rounded-[16px] p-3"style={{minHeight:"700px"}}>
 <FormScreen
 fields={fields}
 values={valuesForForm}
@@ -317,14 +314,13 @@ onClose={()=>navigate("/safety-education")}
 notifyEnabled={notify}
 />
 </div>
-<aside className="w-full lg:flex-1 lg:min-w-[500px] flex flex-col gap-6"style={{minHeight:"700px"}}>
-<PageTitle className="block lg:hidden">참석자 목록</PageTitle>
-<CertificatePanel
-targets={attendees}
-onAdd={handleAddAttendee}
-onRemove={handleRemoveAttendee}
-courseName={formData.eduName}
-completionDate={formData.endDate}
+<aside className="w-full lg:flex-[4] flex flex-col gap-6"style={{minHeight:"700px"}}>
+<PageTitle className="block lg:hidden">알림 대상</PageTitle>
+<AttendeePanel
+attendees={notificationTargets}
+onAdd={handleAddTarget}
+onRemove={handleRemoveTarget}
+onAddMultiple={handleAddMultiple}
 />
 </aside>
 </div>

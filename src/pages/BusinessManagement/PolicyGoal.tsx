@@ -10,63 +10,52 @@ import { Upload, Download, Printer, Trash2, X, FileSpreadsheet } from "lucide-re
 import useHandlers from "@/hooks/useHandlers"
 import { DocumentTemplate } from "@/components/snippetDocument/printDocument"
 import { DataRow } from "@/components/common/tables/DataTable"
+import { policyGoalMockData } from "@/data/mockBusinessData"
 
 type PolicyRow = DataRow & { id: number | string; year: string; goalTitle: string; content: string }
 
 type Field={label:string,name:string,type:"text"|"textarea"|"custom",placeholder?:string,style?:React.CSSProperties,customRender?:React.ReactNode}
 
 const createPolicyTemplate = (row: PolicyRow): DocumentTemplate => ({
-  id: `policy-${row.id}`,
-  title: "경영방침",
-  companyName: "",
-  documentNumber: `POL_${String(row.id).padStart(8, "0")}`,
-  createdAt: row.year,
-  showApproval: false,
-  fields: [
-    { label: "연도", value: row.year, type: "text", section: "overview" },
-    { label: "방침목표명", value: row.goalTitle, type: "text", section: "overview" },
-    { label: "내용", value: row.content, type: "textarea", section: "content" }
-  ]
+id: `policy-${row.id}`,
+title: "경영방침",
+companyName: "",
+documentNumber: `POL_${String(row.id).padStart(8, "0")}`,
+createdAt: row.year,
+showApproval: false,
+fields: [
+{ label: "연도", value: row.year, type: "text", section: "overview" },
+{ label: "방침목표명", value: row.goalTitle, type: "text", section: "overview" },
+{ label: "내용", value: row.content, type: "textarea", section: "content" }
+]
 })
 
 const PolicyGoal:React.FC=()=>{
 const[values,setValues]=useState<{[key:string]:string}>({
-year:"2025",
-goalTitle:"현장 위험요인 실시간 식별 및 제거",
-content:`(주)***은 경영활동 전반에 전 사원의 안전과 보건을 기업의 최우선 가치로 인식하고,
-법규 및 기준을 준수하는 안전보건관리체계를 구축하여 전 직원이 안전하고 쾌적한 환경에서 근무할 수 있도록 최선을 다한다.
-
-이를 위해 다음과 같은 안전보건활동을 통해 지속적으로 안전보건환경을 개선한다.
-
-1. 경영책임자는 '근로자의 생명 보호'와 '안전한 작업환경 조성'을 기업경영활동의 최우선 목표로 삼는다.
-2. 경영책임자는 사업장에 안전보건관리체계를 구축하여 사업장의 위험요인 제거·통제를 위한 충분한 인적·물적 자원을 제공한다.
-3. 안전보건 목표를 설정하고, 이를 달성하기 위한 세부적인 실행계획을 수립하여 이행한다.
-4. 안전보건 관계 법령 및 관련 규정을 준수하는 내부규정을 수립하여 충실히 이행한다.
-5. 근로자의 참여를 통해 위험요인을 파악하고, 파악된 위험요인은 반드시 개선하고, 교육을 통해 공유한다.
-6. 모든 구성원이 자신의 직무와 관련된 위험요인을 알도록 하고, 위험요인 제거·대체 및 통제기법에 관해 교육·훈련을 실시한다.
-7. 모든 공급자와 계약자가 우리의 안전보건 방침과 안전 요구사항을 준수하도록 한다.
-8. 모든 구성원은 안전보건활동에 대한 책임과 의무를 성실히 준수토록 한다.`,
+year: policyGoalMockData.year,
+goalTitle: policyGoalMockData.goalTitle,
+content: policyGoalMockData.content,
 uploadedFile:""
 })
 const fileInputRef=useRef<HTMLInputElement|null>(null)
 const[uploadedFileUrl,setUploadedFileUrl]=useState<string>("")
 
 const {
-  isDialogOpen,
-  approvalLineName,
-  approvers,
-  defaultContent,
-  checkAndSave,
-  handleConfirmApproval,
-  handleCancel
+isDialogOpen,
+approvalLineName,
+approvers,
+defaultContent,
+checkAndSave,
+handleConfirmApproval,
+handleCancel
 } = useApproval({ documentType: "경영방침" })
 
 const policyData: PolicyRow[] = [{ id: 1, year: values.year, goalTitle: values.goalTitle, content: values.content }]
 
 const { handleExcelDownload, handlePrint, isDownloading, isPrinting } = useHandlers<PolicyRow>({
-  data: policyData,
-  checkedIds: [1],
-  createTemplate: createPolicyTemplate
+data: policyData,
+checkedIds: [1],
+createTemplate: createPolicyTemplate
 })
 
 const handleChange=(e:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>)=>{const{name,value}=e.target;setValues(prev=>({...prev,[name]:value}))}
@@ -170,13 +159,13 @@ return (
 </section>
 
 <ApprovalConfirmDialog
-  isOpen={isDialogOpen}
-  documentType="경영방침"
-  approvalLineName={approvalLineName}
-  approvers={approvers}
-  defaultContent={defaultContent}
-  onConfirm={handleConfirmApproval}
-  onCancel={handleCancel}
+isOpen={isDialogOpen}
+documentType="경영방침"
+approvalLineName={approvalLineName}
+approvers={approvers}
+defaultContent={defaultContent}
+onConfirm={handleConfirmApproval}
+onCancel={handleCancel}
 />
 </section>
 )

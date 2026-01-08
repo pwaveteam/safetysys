@@ -1,5 +1,6 @@
 import React from "react"
 import Button from "@/components/common/base/Button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface FilterBarProps {
 showDateRange?: boolean
@@ -7,6 +8,9 @@ startDate?: string
 endDate?: string
 onStartDate?: (date: string) => void
 onEndDate?: (date: string) => void
+showMonthPicker?: boolean
+selectedMonth?: string
+onMonthChange?: (month: string) => void
 keyword?: string
 onKeywordChange?: (value: string) => void
 searchText?: string
@@ -96,6 +100,9 @@ startDate,
 endDate,
 onStartDate,
 onEndDate,
+showMonthPicker,
+selectedMonth,
+onMonthChange,
 keyword,
 onKeywordChange,
 searchText,
@@ -117,12 +124,52 @@ groupOptions,
 onSearch
 }) => {
 const shouldShowDate = Boolean(showDateRange && startDate !== undefined && endDate !== undefined && onStartDate && onEndDate)
+const shouldShowMonth = Boolean(showMonthPicker && selectedMonth !== undefined && onMonthChange)
+
+const handlePrevMonth = () => {
+  if (!selectedMonth || !onMonthChange) return
+  const [year, month] = selectedMonth.split("-").map(Number)
+  const prevDate = new Date(year, month - 2, 1)
+  onMonthChange(`${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, "0")}`)
+}
+
+const handleNextMonth = () => {
+  if (!selectedMonth || !onMonthChange) return
+  const [year, month] = selectedMonth.split("-").map(Number)
+  const nextDate = new Date(year, month, 1)
+  onMonthChange(`${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, "0")}`)
+}
+
+const formatMonth = (monthStr: string) => {
+  const [year, month] = monthStr.split("-")
+  return `${year}년 ${parseInt(month)}월`
+}
 
 const hasSearchInput = (keyword !== undefined && onKeywordChange) || (searchText !== undefined && onSearchText)
 
 return (
 <section className="tbm-filter w-full flex flex-wrap items-center gap-2 px-2 md:px-3 py-2 md:py-3 mb-2 md:mb-3 bg-white border border-[var(--border)] rounded-[10px]">
 <div className="flex flex-wrap items-center gap-2 flex-grow min-w-0 w-full">
+{shouldShowMonth && (
+<div className="flex items-center gap-1 shrink-0">
+<button
+  onClick={handlePrevMonth}
+  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition text-gray-600"
+>
+  <ChevronLeft size={18} />
+</button>
+<span className="text-sm font-medium text-gray-800 min-w-[90px] text-center select-none">
+  {formatMonth(selectedMonth!)}
+</span>
+<button
+  onClick={handleNextMonth}
+  className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition text-gray-600"
+>
+  <ChevronRight size={18} />
+</button>
+</div>
+)}
+
 {shouldShowDate && (
 <div className="flex items-center gap-1 md:gap-2 w-full sm:w-auto min-w-0">
 <span className="text-xs md:text-sm font-medium text-gray-800 whitespace-nowrap shrink-0">기간</span>
@@ -143,8 +190,8 @@ return (
 
 {((inspectionField !== undefined && onInspectionFieldChange) || (inspectionKind !== undefined && onInspectionKindChange)) && (
 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto flex-shrink-0">
-{inspectionField !== undefined && onInspectionFieldChange && renderSelect(inspectionField, onInspectionFieldChange, inspectionFieldOptions)}
 {inspectionKind !== undefined && onInspectionKindChange && renderSelect(inspectionKind, onInspectionKindChange, inspectionKindOptions)}
+{inspectionField !== undefined && onInspectionFieldChange && renderSelect(inspectionField, onInspectionFieldChange, inspectionFieldOptions)}
 </div>
 )}
 

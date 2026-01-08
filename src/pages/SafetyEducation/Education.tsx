@@ -16,8 +16,8 @@ import { DocumentTemplate } from "@/components/snippetDocument/printDocument"
 
 type EducationRow = DataRow & { id: number | string; course: string; targetGroup: string; eduName: string; date: string; trainer: string; sitePhotos: string[] }
 
-const TAB_LABELS = ["안전보건교육", "이수증관리"]
-const TAB_PATHS = ["/safety-education/education", "/safety-education/certificate"]
+const TAB_LABELS = ["안전보건교육"]
+const TAB_PATHS = ["/safety-education/education"]
 
 const educationColumns: Column[] = [
   { key: "index", label: "번호", type: "index" },

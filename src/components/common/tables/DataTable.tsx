@@ -34,7 +34,8 @@ export type ColumnType =
 | "reduction"
 | "riskSelect"
 | "riskResult"
-| "docView";
+| "docView"
+| "progress";
 
 export type Column<T = DataRow> = {
 key: string;
@@ -47,6 +48,11 @@ renderCell?: (row: T, index: number) => React.ReactNode;
 stateOptions?: {
 left: { text: string; color: BadgeColor };
 right: { text: string; color: BadgeColor };
+};
+progressOptions?: {
+doneValue: string;
+doneText: string;
+doingText: string;
 };
 disabledWhenKey?: string;
 disabledWhenValue?: string;
@@ -74,6 +80,7 @@ onUploadChange?: (id: number | string, key: string, file: File) => void;
 onRiskChange?: (id: number | string, key: string, value: number) => void;
 onReductionClick?: (row: T) => void;
 onDocViewClick?: (row: T) => void;
+onProgressClick?: (row: T) => void;
 }
 
 const commonHeaderClass = "font-semibold text-[var(--tertiary)] whitespace-nowrap overflow-hidden text-ellipsis";
@@ -96,7 +103,8 @@ onSignClick,
 onUploadChange,
 onRiskChange,
 onReductionClick,
-onDocViewClick
+onDocViewClick,
+onProgressClick
 }: DataTableProps<T>) {
 const [checked, setChecked] = React.useState<(number | string)[]>([]);
 const [viewerOpen, setViewerOpen] = React.useState(false);
@@ -184,7 +192,8 @@ const centerTypes: ColumnType[] = [
 "reduction",
 "riskSelect",
 "riskResult",
-"docView"
+"docView",
+"progress"
 ];
 
 if (centerTypes.includes(col.type || "text")) return "center";
@@ -681,6 +690,26 @@ className={`${inputBaseClass} w-16 text-right h-[30px]`}
 <span className="leading-none">%</span>
 </div>
 );
+
+case "progress": {
+const opts = col.progressOptions || { doneValue: "완료", doneText: "점검완료", doingText: "점검하기" };
+const isDone = value === opts.doneValue;
+return (
+<div className="flex justify-center items-center w-full h-full">
+<button
+type="button"
+onClick={() => onProgressClick?.(row)}
+className={`px-2 py-1 text-xs rounded-lg border transition-opacity hover:opacity-80 ${
+isDone
+? "bg-gray-100 text-gray-500 border-gray-200"
+: "bg-[var(--secondary)] text-white border-[var(--secondary)]"
+}`}
+>
+{isDone ? opts.doneText : opts.doingText}
+</button>
+</div>
+);
+}
 
 default:
 return (

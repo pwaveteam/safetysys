@@ -133,14 +133,6 @@ export const organizationMockData: DataRow[] = [
   { id: 7, name: "이영수", safetyPosition: "관리감독자", department: "설비보전팀", position: "반장", phone: "010-5555-6666", entryDate: "2025-03-18", assignDate: "2021-04-01" }
 ]
 
-export const educationCertificateMockData: DataRow[] = [
-  { id: 1, name: "홍길동", phone: "010-1234-5678", submitDate: "2025-11-20 14:32", eduName: "신규채용자 교육", eduDate: "2025-11-15", certificate: "certificate_1.pdf", submitStatus: { text: "제출", color: "blue" } },
-  { id: 2, name: "김철수", phone: "010-2345-6789", submitDate: "2025-12-05 09:15", eduName: "관리감독자 교육 (4분기)", eduDate: "2025-12-01", certificate: "certificate_2.pdf", submitStatus: { text: "제출", color: "blue" } },
-  { id: 3, name: "이영희", phone: "010-3456-7890", submitDate: "2025-11-01 16:48", eduName: "유압 설비 특별 교육", eduDate: "2025-10-28", certificate: "", submitStatus: { text: "미제출", color: "red" } },
-  { id: 4, name: "최안전", phone: "010-4444-5555", submitDate: "2025-12-10 11:23", eduName: "밀폐공간 작업 특별 교육", eduDate: "2025-12-08", certificate: "certificate_4.pdf", submitStatus: { text: "제출", color: "blue" } },
-  { id: 5, name: "박현장", phone: "010-5555-6666", submitDate: "2025-10-25 08:05", eduName: "화기 작업 특별 교육", eduDate: "2025-10-20", certificate: "certificate_5.pdf", submitStatus: { text: "제출", color: "blue" } }
-]
-
 export const budgetMockData: DataRow[] = [
   { id: 1, year: "2026", itemName: "슬래그 밀 정비 특화 안전 장비 구입", category: "밀폐/고소 작업 안전 장비 확보", budget: "50000000", spent: "3000000", remaining: "47000000", carryOver: true, attachment: "장비목록.pdf", author: "김안전", entryDate: "2025-12-01" },
   { id: 2, year: "2025", itemName: "유압 설비 안전 진단 용역", category: "유압 라인 및 어큐뮬레이터 정기 점검", budget: "30000000", spent: "28000000", remaining: "2000000", carryOver: false, attachment: "용역계약서.pdf", author: "이설비", entryDate: "2025-01-15" },

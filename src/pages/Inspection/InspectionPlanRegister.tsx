@@ -21,7 +21,7 @@ templateId: number | string | null
 templateName: string
 inspectorName: string
 inspectorPhone: string
-repeatType: "weekly" | "monthly" | null
+repeatType: "daily" | "weekly" | "monthly" | null
 weeklyDays: string[]
 monthlyDates: number[]
 }
@@ -127,7 +127,7 @@ return { ...prev, scheduleEnd: date }
 })
 }, [])
 
-const handleRepeatTypeChange = (type: "weekly" | "monthly") => {
+const handleRepeatTypeChange = (type: "daily" | "weekly" | "monthly") => {
 setFormData(prev => ({
 ...prev,
 repeatType: prev.repeatType === type ? null : type,
@@ -310,7 +310,20 @@ className={`${INPUT_CLASS} ${INPUT_NORMAL_CLASS}`}
 </div>
 
 <div className="border border-[var(--border)] rounded-lg p-4 bg-gray-50">
-<p className="text-xs text-gray-500 mb-3">요일별 또는 일자별 반복 주기 중 하나를 선택하세요</p>
+<p className="text-xs text-gray-500 mb-3">반복 점검을 설정하려면 주기를 선택하세요</p>
+
+<div className="mb-4">
+<label className="flex items-center gap-2 cursor-pointer mb-2">
+<input
+type="radio"
+name="repeatType"
+checked={formData.repeatType === "daily"}
+onChange={() => handleRepeatTypeChange("daily")}
+className="w-4 h-4 text-[var(--primary)]"
+/>
+<span className={LABEL_CLASS} style={{ marginBottom: 0 }}>매일</span>
+</label>
+</div>
 
 <div className="mb-4">
 <label className="flex items-center gap-2 cursor-pointer mb-2">

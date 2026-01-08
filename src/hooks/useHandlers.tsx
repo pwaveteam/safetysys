@@ -28,6 +28,7 @@ export interface ButtonHandlersParams<T = any> {
   submitMessage?: string
   saveAndNextMessage?: string
   completeMessage?: string
+  notificationMessage?: string
   onOpenMoveModal?: () => void
   onMoveSuccess?: (targetGroup: string) => void
   groupKey?: string
@@ -44,12 +45,14 @@ export interface ButtonHandlers {
   handleSaveComplete: () => void
   handleAdd: () => void
   handleSubmit: () => void
+  handleSubmitDocument: (onSuccess?: () => void) => Promise<void>
   handleLoad: () => void
   handleGoToRiskAssessment: () => void
   handleOpenMoveModal: () => void
   handleMoveGroup: (targetGroup: string) => void
   handleExcelDownload: () => Promise<void>
   handlePrint: () => Promise<void>
+  handleSendNotification: (count: number, onSuccess?: () => void) => Promise<void>
   isDownloading: boolean
   isPrinting: boolean
 }
@@ -70,6 +73,7 @@ export function useHandlers<T = any>({
   submitMessage = "전송되었습니다",
   saveAndNextMessage = "내용이 저장되었습니다. 다음 단계로 이동합니다",
   completeMessage = "저장이 완료되었습니다",
+  notificationMessage = "교육알림이 전송되었습니다",
   onOpenMoveModal,
   onMoveSuccess,
   groupKey = "group",
@@ -206,6 +210,18 @@ export function useHandlers<T = any>({
     }
   }
 
+  const handleSubmitDocument = async (onSuccess?: () => void): Promise<void> => {
+    if (!window.confirm("제출하시겠습니까?")) return
+    setLoading(true)
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500))
+      alert("제출되었습니다")
+      onSuccess?.()
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleLoad = async (): Promise<void> => {
     setLoading(true)
     try {
@@ -329,6 +345,22 @@ export function useHandlers<T = any>({
     setIsPrinting(false)
   }
 
+  const handleSendNotification = async (count: number, onSuccess?: () => void): Promise<void> => {
+    if (count === 0) {
+      alert("알림을 전송할 대상이 없습니다")
+      return
+    }
+    if (!window.confirm(`${count}명에게 교육알림을 전송하시겠습니까?`)) return
+    setLoading(true)
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500))
+      alert(notificationMessage)
+      onSuccess?.()
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     handleCreate,
     handleDelete,
@@ -338,12 +370,14 @@ export function useHandlers<T = any>({
     handleSaveComplete,
     handleAdd,
     handleSubmit,
+    handleSubmitDocument,
     handleLoad,
     handleGoToRiskAssessment,
     handleOpenMoveModal,
     handleMoveGroup,
     handleExcelDownload,
     handlePrint,
+    handleSendNotification,
     isDownloading,
     isPrinting
   }

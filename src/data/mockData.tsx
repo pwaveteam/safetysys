@@ -8,35 +8,165 @@ const getRandomPhotos = (seed: number): string[] => {
   return shuffled.slice(0, photoCount)
 }
 
-// 체크리스트 템플릿
-export type ChecklistTemplate = { id: number; name: string; items: string[] }
-
-
-export const checklistTemplateMockData: ChecklistTemplate[] = [
-  { id: 1, name: "공통필수확인(작업전)", items: ["[TBM] 작업 전 위험요인 및 대책 공유가 완료되었는가?", "[TBM] 작업자 전원의 건강 상태(음주, 피로 등)를 확인했는가?", "[필수 보호구 착용] 안전모, 안전화, 보안경 착용 완료여부", "[필수 보호구 착용] 방진마스크 (분진 발생 구역 등급 확인) 및 귀마개 착용여부", "[작업허가서 승인] 화기 / 밀폐공간 / 고소 / 중장비 작업 허가 승인을 득하였는가?", "[LOTOTO 관리] 정비 대상 설비의 동력(전기) 차단 및 잠금 장치를 체결했는가?", "[LOTOTO 관리] 조작 금지 표지판(Tag)을 부착했는가?", "[2인1조 원칙] 단독 작업을 금지하고, 감시인 또는 동료 작업자가 배치되었는가?"] },
-  { id: 2, name: "설비 정비 및 기계 안전", items: ["[잔압 제거] 유압/공압 라인 분해 전, 압력 게이지가 \"0\" Bar임을 확인했는가?", "[잔압 제거] 어큐뮬레이터(축압기) 내부 압력을 완전히 제거했는가?", "[고압 가스 취급] 고압 가스 충전용 호스 및 레귤레이터 상태는 양호한가?", "[고압 가스 취급] 가스 용기는 전도되지 않도록 체인 등으로 고정되어 있는가?", "[협착 및 끼임 방지] 시운전 시 회전체 반경 내 접근 금지 조치가 되어 있는가?", "[협착 및 끼임 방지] 정비 중 불시 가동을 방지할 물리적 조치가 확실한가?", "[화상 및 누유 방지] 고온의 오일/설비 접촉 방지를 위해 충분히 냉각되었는가?", "[화상 및 누유 방지] 오일 드레인(Drain) 시 바닥 오염 및 미끄럼 방지(흡착포) 조치를 했는가?"] },
-  { id: 3, name: "작업 환경 및 보건 (밀폐/분진)", items: ["[적정 조도 확보] 맨홀 내부, 설비 하부 등 어두운 곳의 작업등(방폭 등)은 설치되었는가?", "[호흡기 보호] 슬래그/코팅 제거 작업 시 발생하는 분진에 대비해 특급/1급 마스크를 착용했는가?", "[밀폐공간 안전] 밀폐공간(Chute, Bin) 진입 전 산소 및 유해가스 농도를 측정했는가?", "[밀폐공간 안전] 밀폐공간 입구에 감시인을 배치했는가?", "[근골격계 보호] 중량물 취급 시 무리한 자세를 피하고, 보조 도구(체인블럭 등)를 사용하는가?"] },
-  { id: 4, name: "기구 및 공구 안전", items: ["[수공구/전동공구 점검] 스패너, 렌치 등 수공구의 마모나 균열은 없는가?", "[수공구/전동공구 점검] 전동공구(그라인더 등)의 전선 피복 손상 및 접지 상태는 양호한가?", "[작업 발판 및 사다리] A형 사다리는 평탄한 곳에 설치하고 전도 방지 조치를 했는가?", "[작업 발판 및 사다리] 고소 작업 시 안전대 걸이 시설이 확보되어 있는가?"] },
-  { id: 5, name: "소방시설 외관점검표", items: ["불 보이는 위치에 소화기 설치여부", "불량기계 적정 설치여부", "소화기 용기 변형/손상/부식 여부", "가연성 물질 근처 비치 여부", "소화기 표시사항(제조연월, 사용방법) 훼손 여부", "압력게이지 정상범위 여부", "사용기간 초과 여부", "소화기 거치대, 받침대, 고정상태 이상 여부", "표시사항 훼손 여부", "기초사항(제조번호/제조연월/형식승인) 확인"] },
-  { id: 6, name: "공용공간 점검표", items: ["바닥 마감재 변형, 균열, 파손 여부", "벽체 균열, 누수 흔적 여부", "천장 마감재 탈락, 누수 흔적 여부", "창문/출입문 개폐상태 이상 여부", "계단 난간 흔들림 여부", "복도/통로 장애물 방치 여부", "비상구 표지등 점등 여부", "피난통로 확보 상태", "피난계단 안전상태 이상 여부", "피난통로 및 계단의 조도 부족 여부"] },
-  { id: 7, name: "횡단보도/횡방나스 점검표", items: ["차량 유도선 훼손 여부", "노면 균열, 파손 여부", "차량 진입 방지봉 설치 상태", "차량 안전시설 유지관리 상태", "횡단보도 차선 표시 선명 여부", "교통신호등 작동 여부", "과속방지턱 상태", "교통안전 시설물 설치 기준 적정 여부", "보행자 통행 안전 확보 상태", "보행자 신호 준수 여부"] },
-  { id: 8, name: "외부공간 점검표", items: ["조경수, 잔디, 가로수 관리 상태", "휴게시설, 의자, 파고라 관리상태", "벤치, 운동기구, 체육시설 관리상태", "조명시설 작동 여부", "CCTV 작동 여부", "보행로 균열, 파손 여부", "배수로 막힘 여부", "기타 안전시설 관리 상태"] },
-  { id: 9, name: "어린이놀이시설 및 체육시설 점검표", items: ["놀이기구 설치기준 충족 여부", "부품 탈락 여부", "충돌 방지 매트 상태", "볼트, 너트 풀림 여부", "표시사항 부착 여부", "철제시설 녹 발생 여부", "기초 콘크리트 균열 여부", "안전펜스 설치 상태", "놀이시설 관리대장 작성 여부"] },
-  { id: 10, name: "소방/전기/승강기 점검표", items: ["소화전 압력 정상 여부", "소화펌프 작동 여부", "스프링클러 작동 여부", "비상발전기 작동 여부", "누전차단기 정상 동작 여부", "분전반 차단기 접속상태 양호 여부", "승강기 비상벨 작동 여부", "승강기 안전센서 작동 여부", "승강기 정지층 정확성 여부", "승강기 표기 부착 상태"] }
+export const checklistTemplateMockData: { id: number; name: string; items: string[] }[] = [
+  { id: 1, name: "밀폐공간 작업", items: [
+    "질식위험공간에 출입전 산소 및 유해가스 농도를 측정한다. (적정공기:산소 18%~23.5%, 탄산가스 1.5% 미만, 일산화탄소 30ppm 미만, 황화수소 10ppm 미만)",
+    "적정공기 상태가 유지되도록 작업전·작업중 지속적으로 환기한다.",
+    "구조작업 시 공기호흡기 등 보호 장비를 착용할 수 있도록 작업장 주변에 비치하였다.",
+    "근로자가 수행하는 밀폐공간작업이 존재한다.",
+    "밀폐공간 유해가스, 산소결핍, 화재·폭발 위험 등에 대하여 사전 조사하였다.",
+    "밀폐공간 보건작업 프로그램을 수립하여 시행하였다.",
+    "작업 시작하는 경우 사전에 산소 및 유해가스농도 측정에 관한 사항, 응급조치요령, 환기설비 가동 등 안전작업방법, 보호구사용 등에 대한 사항을 작업 근로자에게 교육 등을 통해 알리고 있다.",
+    "산소농도, 유해가스측정기, 환기팬, 공기호흡기와 송기마스크 등 호흡용 보호구, 안전대, 구명밧줄, 안전장비 등 사전에 필요한 장비준비/점검/사용법 숙지를 하였다.",
+    "긴급 상황 대비 무전기 등 통신장비를 구비하여 연락체계를 갖추었다.",
+    "감시인은 작업자가 내부에 있을 때는 항상 정위치하며, 필요한 보호 장비와 구조장비를 갖추고 있다.",
+    "관계근로자가 아닌 사람의 출입을 금지하고, 그 내용을 보기 쉬운 장소에 게시하였다.",
+    "밀폐공간 작업장소에 근로자를 입장 및 퇴장시킬 때마다 인원을 점검하였다.",
+    "작업을 위해 허가자에게 밀폐공간작업 허가를 받고 있다.",
+    "관리감독자가 밀폐공간 안전보건조치 사항을 지휘, 점검 등의 업무를 하고 있다."
+  ]},
+  { id: 2, name: "소방시설 외관점검표", items: [
+    "잘 보이는 위치에 소화기 설치여부",
+    "보행거리 적정 설치여부",
+    "소화기 용기 변형/손상/부식 여부",
+    "안전핀 고정 여부",
+    "가압식 소화기(폐기 대상, 압력계 미부착 분말 소화기)비치 여부",
+    "소화 약제 용기 지시압력치 적정여부",
+    "수신부의 설치장소 및 음량장치의 음량 적정여부",
+    "감지기 작동여부 및 설치위치의 적정여부",
+    "소화약제 방출 시 장애물 존재여부",
+    "가스차단밸브 변형/손상/부식 여부"
+  ]},
+  { id: 3, name: "공용공간 점검표", items: [
+    "유리의 금감/깨짐",
+    "교실 바닥의 안전상태(바닥균열/마감재 탈락 및 노후화, 보행 장애물 여부)",
+    "벽체 안전상태(균열 및 기울임 여부)",
+    "벽체 부착물의 안전상태(칠판, 게시판, 선풍기 등의 고정상태)",
+    "콘센트의 안전상태(먼지/탄 자국, 고정 불량, 문어발식 사용여부)",
+    "출입문 안전상태(레일, 손 끼임 방지, 부착물 등 상태)",
+    "창호 안전상태(유리, 추락방지 보호시설의 고정상태)",
+    "창호 개폐상태(레일, 창틀의 손상여부)",
+    "천장의 마감재 안전상태(처짐, 파손, 누수흔적 등 상태)",
+    "천장 부착물 안전상태(전등, 선풍기, 냉난방설비, 빔 프로젝트 고정 상태)",
+    "복도바닥의 안전상태(피난관련시설 등 상태 여부)",
+    "책걸상 관리상태(파손, 동작 등 상태여부)"
+  ]},
+  { id: 4, name: "통학로/통학버스 점검표", items: [
+    "교내 차량 통행로 및 통학로 안전상태(인도와 차도 구분, 도로파손, 보행 장애물 상태)",
+    "학교 앞 통학로/도로 안전상태(보행 장애물, 도로/보도블록/과속방지턱 상태)",
+    "학교 앞 교통시설물 안전상태(교통표지판 시야확보, 볼록거울, 안전 휀스 상태)",
+    "어린이통학버스 등록차량 여부 및 차량 앞 유리에 통학버스 신고필증 부착 상태",
+    "차내 모든 좌석의 안전벨트 또는 안전시트의 설치 및 정상 작동 상태",
+    "광각 후사경 설치유무(의무사항) 및 고정상태",
+    "차량 내 날카로운 곳 또는 불필요한 물건의 존치 상태",
+    "정기적 차량 안전점검 실시 및 기록상태, 안전수칙 부착여부, 안전교육 실시여부"
+  ]},
+  { id: 5, name: "외부공간 점검표", items: [
+    "운동장 안전 상태(패임, 장애물, 트랙 주변 단 차이 메꾸기)",
+    "운동장 배수로 안전상태(파손, 패임, 퇴적물의 청소상태)",
+    "옹벽, 석축, 담장의 안전 상태(균열, 처짐, 기울어짐, 침하 등)",
+    "교문 안전상태(돌붙임 균열, 탈락, 용접부 상태이상 등)",
+    "포장 안전상태(침하, 균열, 파손 여부 등)",
+    "CCTV안전상태(파손, 고정, 작동상태)",
+    "맨홀 뚜껑 탈락, 파손여부",
+    "울타리, 의자, 가로등, 표지판, 식수대 상태"
+  ]},
+  { id: 6, name: "공통필수확인(작업전)", items: [
+    "[TBM] 작업 전 위험요인 및 대책 공유가 완료되었는가?",
+    "[TBM] 작업자 전원의 건강 상태(음주, 피로 등)를 확인했는가?",
+    "[필수 보호구 착용] 안전모, 안전화, 보안경 착용 완료여부",
+    "[필수 보호구 착용] 방진마스크 (분진 발생 구역 등급 확인) 및 귀마개 착용여부",
+    "[작업허가서 승인] 화기 / 밀폐공간 / 고소 / 중장비 작업 허가 승인을 득하였는가?",
+    "[LOTOTO 관리] 정비 대상 설비의 동력(전기) 차단 및 잠금 장치를 체결했는가?",
+    "[LOTOTO 관리] 조작 금지 표지판(Tag)을 부착했는가?",
+    "[2인1조 원칙] 단독 작업을 금지하고, 감시인 또는 동료 작업자가 배치되었는가?"
+  ]},
+  { id: 7, name: "설비 정비 및 기계 안전", items: [
+    "[잔압 제거] 유압/공압 라인 분해 전, 압력 게이지가 \"0\" Bar임을 확인했는가?",
+    "[잔압 제거] 어큐뮬레이터(축압기) 내부 압력을 완전히 제거했는가?",
+    "[고압 가스 취급] 고압 가스 충전용 호스 및 레귤레이터 상태는 양호한가?",
+    "[고압 가스 취급] 가스 용기는 전도되지 않도록 체인 등으로 고정되어 있는가?",
+    "[협착 및 끼임 방지] 시운전 시 회전체 반경 내 접근 금지 조치가 되어 있는가?",
+    "[협착 및 끼임 방지] 정비 중 불시 가동을 방지할 물리적 조치가 확실한가?",
+    "[화상 및 누유 방지] 고온의 오일/설비 접촉 방지를 위해 충분히 냉각되었는가?",
+    "[화상 및 누유 방지] 오일 드레인(Drain) 시 바닥 오염 및 미끄럼 방지(흡착포) 조치를 했는가?"
+  ]},
+  { id: 8, name: "화재, 폭발", items: [
+    "발생하는 화염 또는 스파크 등이 인근 공정설비에 영향이 있다고 판단되는 범위의 지역을 작업구역으로 표시하는가?",
+    "화기·용접작업 장소에 근로자의 통행·출입을 제한하는가?",
+    "화기작업 전에 작업 대상기기 및 작업구역 내에서 인화성 물질 및 독성 물질의 가스 농도를 측정하여 허가서에 기록하는가?",
+    "불꽃을 발생하는 내연설비의 장비나 차량 등은 작업구역 내 근로자의 출입을 통제하는가?",
+    "화기작업을 수행하기 위하여 밸브를 차단하거나 맹판을 설치할 때에는 차단하는 밸브에 밸브 잠금 표지 및 맹판 설치 표지를 부착하는가?",
+    "화학설비 등의 내부에서 화기작업을 수행할 경우에는 배관 및 설비 내의 위험물질을 완전히 비우고 세정한 후에 작업을 수행하는가?",
+    "밀폐(제한)공간에서의 작업을 수행할 때에는 작업 전에 밀폐공간 내의 공기를 외부의 신선한 공기로 충분히 치환하는 등의 조치(강제 환기 등)를 실시하는가?",
+    "용접불티 비산방지 덮개 또는 용접 방화포 등 불꽃 비산 방지조치를 하고 개방된 맨홀과 하수구(Sewer) 등은 덮거나 닫는가?",
+    "화재감시자를 지정하여 화기작업을 시작하기 전과 작업 도중 안전 상태를 확인하는가?",
+    "화기작업 중에 수시로 가스 농도를 측정하는가? (분진이 있는 장소는 분진농도를 추가로 측정)",
+    "화기작업 전에 이동식 소화기 등을 비치하는가?",
+    "화학물질을 화기나 그 밖에 점화원이 될 우려가 있는 것에 접근, 가열, 마찰시키는 등의 행위를 하지 않는가?",
+    "인화성물질을 취급하는 구역은 폭발위험장소로 구분하고 적정한 방폭설비가 설치되어 있는가?",
+    "인화성액체의 증기, 가스에 의한 화재 폭발을 감지하기 위한 가스 검지 및 경보장치가 설치되어 있는가?",
+    "가스경보기가 작동할 경우 조치사항을 근로자에게 교육하고 있는가?",
+    "배관 연결부, 밸브 등의 연결부에서 화학물질의 누출 여부를 정기적으로 점검하는가?"
+  ]},
+  { id: 9, name: "정비 등 작업 시 운전정지", items: [
+    "현장에서 사용하는 위험기계에 적합한 방호장치를 설치하고 있으며, 안전인증·안전검사 대상인 경우 관련 인증·검사를 받고 사용하고 있는가?",
+    "안전인증·안전검사를 받을 당시의 방호조치 등의 기능이 잘 유지되고 있는가?",
+    "기계·기구 또는 설비에 설치한 방호장치를 임의 해체하거나 기능을 해제한 상태로 사용하지 않도록 관리하고 있는가?",
+    "끼임 위험이 있는 원동기, 회전축, 기어 및 체인 등에 대하여 방지조치(덮개, 울 등 설치)를 적정하게 하고 있는가?",
+    "동력으로 작동되는 기계에 스위치, 클러치, 벨트이동장치 등 동력 차단장치를 설치하고 있는가?",
+    "사용 중인 기계·기구 또는 설비에 대한 정비 등 작업 시 운전정지 등의 조치절차를 수립 및 이행하고 있는가?",
+    "기계·기구 또는 설비 사용 중 고장 등 이상 발생 시 운전정지 등의 조치 절차를 이행하고 있는가?",
+    "후진경보기와 경광등을 갖춘 지게차를 자격 보유자가 조종하는가?",
+    "근로자는 개인보호구(안전대, 안전모, 안전화)를 올바르게 착용하고 있는가?"
+  ]},
+  { id: 10, name: "전기작업", items: [
+    "작업 전로 차단, 잠금장치 및 꼬리표(LOTO) 부착하고 검전기를 이용하여 충전여부를 확인하는가?",
+    "전기기구 취급작업 시 전기설비로부터 폭 70cm 이상의 작업공간을 확보하고 있는가?",
+    "전기기계·기구 및 설비의 전원 접속부인 충전부가 노출되어 있지 않은가?",
+    "전기기계·기구 및 설비의 금속재, 철재 등의 외함에 접지시설이 되어있는가?",
+    "전기기기 외함에 접지된 접지선이 접지극과 직접 연결되어 있는가? (접지 연속성 유무)",
+    "누전여부 체크를 위해 주기적으로 절연저항을 측정하고 기록하는가?",
+    "주기적으로 접지저항을 측정하고, 접지 저항값이 기준에 적합한가?",
+    "용접선, 배선, 이동전선 등 절연전선의 피복이 손상되어 있지 않은가?",
+    "정전작업 중 타 작업자의 개폐기 오조작 방지를 위하여 분전반 또는 개폐기에 잠금장치나 표지판을 설치하는가?",
+    "변전실 등 특별고압 충전전로에 접근한계거리 표지판이 부착되어 있는가?",
+    "근접장소에서의 청소 등의 작업 시 접근한계거리를 유지하여 작업하도록 관리하는가?",
+    "물 등의 도전성이 높은 액체가 있는 습윤한 장소에서의 이동전선 등은 충분한 절연효과가 있는가?",
+    "정전기에 의한 화재, 폭발 등의 위험이 있는 경우 해당 설비에 대하여 확실한 방법으로 접지, 도전성 재료 사용, 제전장치 등 정전기 제거 조치를 하는가?",
+    "전기기계·기구 또는 전로의 설치·해체·정비·점검 등의 전기작업(50V초과 또는 전기에너지가 250VA를 넘는 경우)시 작업계획서를 작성하고 그 계획에 따라 작업하는가?",
+    "충전전로 등의 전기 작업을 할 때에는 절연용 보호구, 절연용 방호구 등을 근로자에게 지급·착용토록 하는가?"
+  ]},
+  { id: 11, name: "일반사항(공통)", items: [
+    "작업에 적합한 보호구 지급·착용 여부",
+    "작업자 안전보건교육 실시여부 (위험요인, 안전작업방법, 작업 특기사항)",
+    "작업별 안전수칙 준수여부 (위험요인 확인·제거, 절차 준수, 안전시설 설치 등)",
+    "안전보건표지 부착(위험장소, 설비 등) 여부",
+    "위험물질 사용 및 보관 등 관리상태 적정 여부 (가스, 가연성·발화성 물질, 위험보관소 등)",
+    "가설 전기설비 설치 및 관리상태 적정 여부 (임시분전반, 케이블 등)",
+    "개구부 및 고소작업 등 추락방지 조치 여부 (작업비계, 생명줄, 안전난간, 방호망 등 설치)",
+    "화재예방 조치상태 (소화기 비치, 불꽃방지커버 및 방염포 설치 등)",
+    "건설기계 작업 안전수칙 준수여부 (사전점검, 전도방지 조치, 신호수 배치 등)",
+    "작업장 안전통로 설치 및 동선 확보 상태 (가설계단, 가설통로 등)",
+    "사다리 작업 시 안전 수칙 준수 여부 (아웃트리거 설치, 2인1조 작업 등)",
+    "작업장 소음 및 조도의 적정 상태",
+    "작업현장 정리정돈 상태",
+    "긴급 상황 대비 비상연락망 관리 상태"
+  ]}
 ]
 
 export const inspectionPlanMockData: DataRow[] = [
-  { id: 11, planName: "슬래그 밀 메인 베어링 오일 분석 및 윤활 상태 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "오영수", schedule: "2025/12/20 ~ 2025/12/22", registrant: "홍길동", progress: "미점검" },
-  { id: 10, planName: "슬래그 밀 LOTO 시스템 정기 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "이안전", schedule: "2025/12/15 ~ 2025/12/16", registrant: "김민수", progress: "미점검" },
-  { id: 9, planName: "인렛 슈트 코팅 제거 작업허가서(PTW) 확인", site: "Slag Mill 실", area: "자산(설비)", kind: "수시점검", inspector: "김현장", schedule: "2025/12/10 ~ 2025/12/10", registrant: "박현우", progress: "진행중" },
-  { id: 8, planName: "마스터 롤러 어큐뮬레이터 교체 안전 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "최정비", schedule: "2025/12/17 ~ 2025/12/18", registrant: "이정아", progress: "완료" },
-  { id: 7, planName: "HSLM 오일 보충 작업 위험성평가 확인", site: "Slag Mill 실", area: "자산(설비)", kind: "수시점검", inspector: "박관리", schedule: "2025/12/12 ~ 2025/12/12", registrant: "최준영", progress: "미점검" },
-  { id: 6, planName: "협소/고소 작업 안전 수칙 준수 점검 (밀 실 주변)", site: "(주)에스피에스앤아이 당진 슬래그공장", area: "시설물", kind: "특별점검", inspector: "정안전", schedule: "2025/12/19 ~ 2025/12/19", registrant: "김철수", progress: "미점검" },
-  { id: 5, planName: "유압 라인 고압/고온 작업 위험 분석 검토", site: "Slag Mill 실", area: "자산(설비)", kind: "수시점검", inspector: "오감독", schedule: "2025/12/11 ~ 2025/12/11", registrant: "이민지", progress: "진행중" },
-  { id: 4, planName: "소형밀 내부 점검 및 오일 주입 안전 확인", site: "소형밀 실", area: "자산(설비)", kind: "특별점검", inspector: "문반장", schedule: "2025/12/13 ~ 2025/12/13", registrant: "박서준", progress: "미점검" },
-  { id: 3, planName: "분진 발생 작업 호흡기 보호구 착용 점검", site: "(주)에스피에스앤아이 당진 슬래그공장", area: "시설물", kind: "수시점검", inspector: "배소장", schedule: "2025/12/05 ~ 2025/12/05", registrant: "정희원", progress: "완료" },
-  { id: 2, planName: "중량물 운반 2인 1조 및 보조도구 준수 점검", site: "소형밀 실", area: "자산(설비)", kind: "특별점검", inspector: "장감독", schedule: "2025/12/03 ~ 2025/12/04", registrant: "김은정", progress: "완료" },
-  { id: 1, planName: "컨베이어 벨트 교체 LOTOTO 실시 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "윤영광", schedule: "2025/12/01 ~ 2025/12/02", registrant: "최정수", progress: "완료" }
+  { id: 11, planName: "슬래그 밀 메인 베어링 오일 분석 및 윤활 상태 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "오영수", schedule: "2026-01-15 ~ 2026-01-17", registrant: "홍길동", progress: "미점검" },
+  { id: 10, planName: "슬래그 밀 LOTO 시스템 정기 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "이안전", schedule: "2026-01-10 ~ 2026-01-11", registrant: "김민수", progress: "미점검" },
+  { id: 9, planName: "인렛 슈트 코팅 제거 작업허가서(PTW) 확인", site: "Slag Mill 실", area: "자산(설비)", kind: "수시점검", inspector: "김현장", schedule: "2026-01-05 ~ 2026-01-05", registrant: "박현우", progress: "진행중" },
+  { id: 8, planName: "마스터 롤러 어큐뮬레이터 교체 안전 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "최정비", schedule: "2025-12-28 ~ 2025-12-29", registrant: "이정아", progress: "완료" },
+  { id: 7, planName: "HSLM 오일 보충 작업 위험성평가 확인", site: "Slag Mill 실", area: "자산(설비)", kind: "수시점검", inspector: "박관리", schedule: "2026-01-08 ~ 2026-01-08", registrant: "최준영", progress: "미점검" },
+  { id: 6, planName: "협소/고소 작업 안전 수칙 준수 점검 (밀 실 주변)", site: "(주)에스피에스앤아이 당진 슬래그공장", area: "시설물", kind: "특별점검", inspector: "정안전", schedule: "2026-01-12 ~ 2026-01-12", registrant: "김철수", progress: "미점검" },
+  { id: 5, planName: "유압 라인 고압/고온 작업 위험 분석 검토", site: "Slag Mill 실", area: "자산(설비)", kind: "수시점검", inspector: "오감독", schedule: "2026-01-06 ~ 2026-01-06", registrant: "이민지", progress: "진행중" },
+  { id: 4, planName: "소형밀 내부 점검 및 오일 주입 안전 확인", site: "소형밀 실", area: "자산(설비)", kind: "특별점검", inspector: "문반장", schedule: "2025-12-30 ~ 2025-12-30", registrant: "박서준", progress: "미점검" },
+  { id: 3, planName: "분진 발생 작업 호흡기 보호구 착용 점검", site: "(주)에스피에스앤아이 당진 슬래그공장", area: "시설물", kind: "수시점검", inspector: "배소장", schedule: "2025-12-20 ~ 2025-12-20", registrant: "정희원", progress: "완료" },
+  { id: 2, planName: "중량물 운반 2인 1조 및 보조도구 준수 점검", site: "소형밀 실", area: "자산(설비)", kind: "특별점검", inspector: "장감독", schedule: "2025-12-18 ~ 2025-12-19", registrant: "김은정", progress: "완료" },
+  { id: 1, planName: "컨베이어 벨트 교체 LOTOTO 실시 점검", site: "Slag Mill 실", area: "자산(설비)", kind: "특별점검", inspector: "윤영광", schedule: "2025-12-15 ~ 2025-12-16", registrant: "최정수", progress: "완료" }
 ]
 
 export const inspectionChecklistMockData: DataRow[] = [
@@ -78,16 +208,16 @@ export const safetyEducationMockData: DataRow[] = [
 
 // TBM
 export const tbmListMockData: DataRow[] = [
-  { id: 1, tbm: "밀폐공간 진입 안전수칙 및 감시인 역할 교육", date: "2025-12-10(화)", start: "08:30", end: "09:00", targetCount: 4, participantsCount: 4, leader: "이호성", sitePhotos: getRandomPhotos(51), eduDate: "2025-12-10(화)", eduTime: "08:30 ~ 09:00 (30분)", targetText: "4명", participantsText: "4명", attachments: true },
-  { id: 2, tbm: "LOTOTO 실시 절차 및 에너지 차단 확인 교육", date: "2025-12-01(월)", start: "07:30", end: "08:00", targetCount: 5, participantsCount: 5, leader: "김민수", sitePhotos: getRandomPhotos(52), eduDate: "2025-12-01(월)", eduTime: "07:30 ~ 08:00 (30분)", targetText: "5명", participantsText: "5명", attachments: false },
-  { id: 3, tbm: "유압/고압 설비 작업 전 잔압 해제 교육", date: "2025-12-12(금)", start: "14:00", end: "14:30", targetCount: 3, participantsCount: 3, leader: "이정아", sitePhotos: getRandomPhotos(53), eduDate: "2025-12-12(금)", eduTime: "14:00 ~ 14:30 (30분)", targetText: "3명", participantsText: "3명", attachments: true },
-  { id: 4, tbm: "소형밀 청소 작업 분진 발생 및 호흡기 보호 교육", date: "2025-12-13(토)", start: "08:40", end: "09:10", targetCount: 3, participantsCount: 2, leader: "문반장", sitePhotos: getRandomPhotos(54), eduDate: "2025-12-13(토)", eduTime: "08:40 ~ 09:10 (30분)", targetText: "3명", participantsText: "2명", attachments: false },
-  { id: 5, tbm: "중량물 운반 시 2인 1조 및 보조도구 사용 교육", date: "2025-12-04(목)", start: "08:00", end: "08:30", targetCount: 4, participantsCount: 4, leader: "장감독", sitePhotos: getRandomPhotos(55), eduDate: "2025-12-04(목)", eduTime: "08:00 ~ 08:30 (30분)", targetText: "4명", participantsText: "4명", attachments: true },
-  { id: 6, tbm: "어큐뮬레이터 교체 고소 및 낙하물 방지 교육", date: "2025-12-17(화)", start: "13:00", end: "13:30", targetCount: 5, participantsCount: 5, leader: "최정비", sitePhotos: getRandomPhotos(56), eduDate: "2025-12-17(화)", eduTime: "13:00 ~ 13:30 (30분)", targetText: "5명", participantsText: "5명", attachments: false },
-  { id: 7, tbm: "화기 작업 전 소화기 비치 및 주변 인화물 제거 교육", date: "2025-12-01(월)", start: "15:30", end: "16:00", targetCount: 4, participantsCount: 4, leader: "김철수", sitePhotos: getRandomPhotos(57), eduDate: "2025-12-01(월)", eduTime: "15:30 ~ 16:00 (30분)", targetText: "4명", participantsText: "4명", attachments: true },
-  { id: 8, tbm: "전기 설비 작업 전원 차단 및 절연 도구 사용 교육", date: "2025-12-03(수)", start: "10:00", end: "10:30", targetCount: 3, participantsCount: 3, leader: "김민수", sitePhotos: getRandomPhotos(58), eduDate: "2025-12-03(수)", eduTime: "10:00 ~ 10:30 (30분)", targetText: "3명", participantsText: "3명", attachments: false },
-  { id: 9, tbm: "유압 라인 고온 작업 시 화상 예방 및 PPE 교육", date: "2025-12-11(목)", start: "09:30", end: "10:00", targetCount: 3, participantsCount: 3, leader: "오감독", sitePhotos: getRandomPhotos(59), eduDate: "2025-12-11(목)", eduTime: "09:30 ~ 10:00 (30분)", targetText: "3명", participantsText: "3명", attachments: true },
-  { id: 10, tbm: "비상 상황 발생 시 대피 경로 및 비상 연락 체계 교육", date: "2025-12-19(금)", start: "08:00", end: "08:15", targetCount: 6, participantsCount: 6, leader: "정안전", sitePhotos: getRandomPhotos(60), eduDate: "2025-12-19(금)", eduTime: "08:00 ~ 08:15 (15분)", targetText: "6명", participantsText: "6명", attachments: false }
+  { id: 1, tbm: "밀폐공간 진입 안전수칙 및 감시인 역할 교육", date: "2025-12-10(화)", start: "08:30", end: "09:00", leader: "이호성", sitePhotos: getRandomPhotos(51), eduDate: "2025-12-10(화)", eduTime: "08:30 ~ 09:00 (30분)", attachments: true, attendees: [{ name: "김철수", phone: "010-1234-5678", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-10 08:32" }, { name: "이영희", phone: "010-2345-6789", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-10 08:33" }, { name: "박민수", phone: "010-3456-7890", signed: false }, { name: "최정아", phone: "010-4567-8901", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-10 08:36" }, { name: "정대현", phone: "010-5678-9012", signed: false }] },
+  { id: 2, tbm: "LOTOTO 실시 절차 및 에너지 차단 확인 교육", date: "2025-12-01(월)", start: "07:30", end: "08:00", leader: "김민수", sitePhotos: getRandomPhotos(52), eduDate: "2025-12-01(월)", eduTime: "07:30 ~ 08:00 (30분)", attachments: false, attendees: [{ name: "홍길동", phone: "010-1111-2222", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-01 07:32" }, { name: "김안전", phone: "010-2222-3333", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-01 07:34" }, { name: "이현장", phone: "010-3333-4444", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-01 07:35" }, { name: "박감독", phone: "010-4444-5555", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-01 07:37" }, { name: "최관리", phone: "010-5555-6666", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-01 07:38" }] },
+  { id: 3, tbm: "유압/고압 설비 작업 전 잔압 해제 교육", date: "2025-12-12(금)", start: "14:00", end: "14:30", leader: "이정아", sitePhotos: getRandomPhotos(53), eduDate: "2025-12-12(금)", eduTime: "14:00 ~ 14:30 (30분)", attachments: true, attendees: [{ name: "정비원", phone: "010-6666-7777", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-12 14:05" }, { name: "김설비", phone: "010-7777-8888", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-12 14:07" }, { name: "이기술", phone: "010-8888-9999", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-12 14:08" }] },
+  { id: 4, tbm: "소형밀 청소 작업 분진 발생 및 호흡기 보호 교육", date: "2025-12-13(토)", start: "08:40", end: "09:10", leader: "문반장", sitePhotos: getRandomPhotos(54), eduDate: "2025-12-13(토)", eduTime: "08:40 ~ 09:10 (30분)", attachments: false, attendees: [{ name: "김청소", phone: "010-1234-1234", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-13 08:42" }, { name: "이작업", phone: "010-2345-2345", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-13 08:44" }, { name: "박분진", phone: "010-3456-3456", signed: false }] },
+  { id: 5, tbm: "중량물 운반 시 2인 1조 및 보조도구 사용 교육", date: "2025-12-04(목)", start: "08:00", end: "08:30", leader: "장감독", sitePhotos: getRandomPhotos(55), eduDate: "2025-12-04(목)", eduTime: "08:00 ~ 08:30 (30분)", attachments: true, attendees: [{ name: "김운반", phone: "010-4567-4567", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-04 08:03" }, { name: "이중량", phone: "010-5678-5678", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-04 08:05" }, { name: "박조장", phone: "010-6789-6789", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-04 08:06" }, { name: "최안전", phone: "010-7890-7890", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-04 08:08" }] },
+  { id: 6, tbm: "어큐뮬레이터 교체 고소 및 낙하물 방지 교육", date: "2025-12-17(화)", start: "13:00", end: "13:30", leader: "최정비", sitePhotos: getRandomPhotos(56), eduDate: "2025-12-17(화)", eduTime: "13:00 ~ 13:30 (30분)", attachments: false, attendees: [{ name: "김고소", phone: "010-8901-8901", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-17 13:02" }, { name: "이정비", phone: "010-9012-9012", signed: false }, { name: "박교체", phone: "010-0123-0123", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-17 13:05" }, { name: "최낙하", phone: "010-1234-0000", signed: false }, { name: "정방지", phone: "010-2345-0000", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-17 13:08" }] },
+  { id: 7, tbm: "화기 작업 전 소화기 비치 및 주변 인화물 제거 교육", date: "2025-12-01(월)", start: "15:30", end: "16:00", leader: "김철수", sitePhotos: getRandomPhotos(57), eduDate: "2025-12-01(월)", eduTime: "15:30 ~ 16:00 (30분)", attachments: true, attendees: [{ name: "김화기", phone: "010-3456-0000", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-01 15:32" }, { name: "이소방", phone: "010-4567-0000", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-01 15:34" }, { name: "박안전", phone: "010-5678-0000", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-01 15:35" }, { name: "최인화", phone: "010-6789-0000", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-01 15:37" }] },
+  { id: 8, tbm: "전기 설비 작업 전원 차단 및 절연 도구 사용 교육", date: "2025-12-03(수)", start: "10:00", end: "10:30", leader: "김민수", sitePhotos: getRandomPhotos(58), eduDate: "2025-12-03(수)", eduTime: "10:00 ~ 10:30 (30분)", attachments: false, attendees: [{ name: "김전기", phone: "010-7890-0000", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-03 10:02" }, { name: "이설비", phone: "010-8901-0000", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-03 10:04" }, { name: "박절연", phone: "010-9012-0000", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-03 10:05" }] },
+  { id: 9, tbm: "유압 라인 고온 작업 시 화상 예방 및 PPE 교육", date: "2025-12-11(목)", start: "09:30", end: "10:00", leader: "오감독", sitePhotos: getRandomPhotos(59), eduDate: "2025-12-11(목)", eduTime: "09:30 ~ 10:00 (30분)", attachments: true, attendees: [{ name: "김유압", phone: "010-0123-1111", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-11 09:33" }, { name: "이고온", phone: "010-1234-2222", signed: false }, { name: "박화상", phone: "010-2345-3333", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-11 09:36" }] },
+  { id: 10, tbm: "비상 상황 발생 시 대피 경로 및 비상 연락 체계 교육", date: "2025-12-19(금)", start: "08:00", end: "08:15", leader: "정안전", sitePhotos: getRandomPhotos(60), eduDate: "2025-12-19(금)", eduTime: "08:00 ~ 08:15 (15분)", attachments: false, attendees: [{ name: "김비상", phone: "010-3456-4444", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-19 08:02" }, { name: "이대피", phone: "010-4567-5555", signed: false }, { name: "박연락", phone: "010-5678-6666", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-19 08:04" }, { name: "최경로", phone: "010-6789-7777", signed: false }, { name: "정체계", phone: "010-7890-8888", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-19 08:06" }, { name: "강안전", phone: "010-8901-9999", signed: false }] }
 ]
 
 export const nearMissMockData: DataRow[] = [
@@ -249,4 +379,71 @@ export const qrManagementMockData = [
   { id: 1, qrName: "이수증 제출 QR", link: "안드로이드/iOS 다운로드 링크", useStatus: true }
 ]
 
-export { reportManagementMockData, reportContractorMockData } from "./mockReportData"
+// Routine Checklist Items (안전순회 점검항목)
+export const routineChecklistItemsMockData = [
+  { category: "보호구", items: [
+    "작업에 적합한 보호구 준비 및 착용 여부",
+    "안전검사에 합격한 보호구 지급 및 성능 여부",
+    "작업관련 장비 점검여부"
+  ]},
+  { category: "관리", items: [
+    "안전작업 연장 승인 여부 (일정, 야간작업)",
+    "안전교육 미필자 작업투입 여부",
+    "미승인 화학물질 사용 여부",
+    "사고 발생 시 대처요령 숙지 여부",
+    "안전작업계획서 존재 및 준수 여부",
+    "작업에 적합한 인원배치 및 자격조건 확인",
+    "위험물/고압가스용기 전도방지장치 및 점검",
+    "위험 및 제한구역 임의 출입 여부",
+    "위험기계기구 사용 허가 여부"
+  ]},
+  { category: "전기", items: [
+    "전원 Cable의 손상 및 절연상태",
+    "콘센트, 기계기구의 접지 상태",
+    "절연공구 사용 및 감전예방조치 상태",
+    "과부하상태로 용접기 등 전기제품 사용 여부",
+    "임시배선작업에 의한 전기작업 여부",
+    "미사용 기계기구/장비 전원차단 여부",
+    "작업에 적합한 계측기 준비 및 사용 여부",
+    "전기 계측기의 안전보건공단 등급 만족 여부"
+  ]},
+  { category: "추락", items: [
+    "고소작업(1.8M)에서의 안전대, 안전모 착용",
+    "이동식 사다리의 기능 상태",
+    "고소작업장비에 대한 안전점검 실시 여부"
+  ]},
+  { category: "화재예방", items: [
+    "소화기 비치 및 사용가능 여부",
+    "불티비산 방지조치 및 화재감시자 배치 여부",
+    "작업 중 흡연 또는 금연장소에서의 흡연 여부",
+    "기름걸레 방치 등 자연발화 예방조치 여부",
+    "인화성물질 관리 상태"
+  ]},
+  { category: "LOTOTO", items: [
+    "잔류 에너지(공기, 전기, 유압 등) 제거 여부",
+    "LOTOTO 설치 여부"
+  ]},
+  { category: "MSDS", items: [
+    "MSDS 자료집 게시 상태",
+    "MSDS 경고 표지 부착 상태"
+  ]},
+  { category: "질식", items: [
+    "밀폐공간 존재 및 산소농도 관리 상태"
+  ]},
+  { category: "운반", items: [
+    "지게차 등의 운전자격 여부",
+    "운전장비의 안전장치 부착 및 기능 여부",
+    "과적 여부 및 적재방법의 적합성 여부",
+    "사내교통안전 (주차, 일방통행) 준수 여부"
+  ]},
+  { category: "정리정돈", items: [
+    "공구, 전선, 자재 등의 정리정돈 상태",
+    "비상통로, 소방통로 등의 확보 여부",
+    "창고, 야적장 정리정돈 상태",
+    "낙하 위험 구역에서의 낙하물 방지조치 상태"
+  ]},
+  { category: "기타", items: [
+    "2인 이상 작업 시 커뮤니케이션 장비 존재",
+    "기타 안전보건에 위반되는 행위 및 상태"
+  ]}
+]

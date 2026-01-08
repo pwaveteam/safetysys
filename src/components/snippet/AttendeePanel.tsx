@@ -74,23 +74,7 @@ const toggleGroup = (group: string) => {
 const isDemo = attendees.length === 0
 const currentList = isDemo ? demoRows : attendees
 
-const { handleAdd: triggerAdd, handleSubmit } = useHandlers({
-data: currentList,
-checkedIds: [],
-onAdd: () => {
-if (!name.trim()) { alert("이름을 입력해주세요"); return }
-const phoneDigits = phone.replace(/[^0-9]/g, "")
-if (phoneDigits.length !== 11) { alert("연락처를 정확히 입력해주세요 (11자리)"); return }
-onAdd({ name, phone })
-setName("")
-setPhone("")
-},
-onSubmit: () => {
-if (currentList.length === 0) { alert("등록된 참석자가 없습니다"); return }
-alert(`${currentList.length}명의 참석자에게 서명 요청이 전송되었습니다`)
-},
-submitMessage: ""
-})
+const { handleSendNotification } = useHandlers({ data: currentList, checkedIds: [] })
 
 const formatPhone = (v: string) => {
 const only = v.replace(/[^0-9]/g, "")
@@ -99,11 +83,24 @@ if (only.length <= 7) return `${only.slice(0, 3)}-${only.slice(3)}`
 return `${only.slice(0, 3)}-${only.slice(3, 7)}-${only.slice(7, 11)}`
 }
 
+const handleAddClick = () => {
+if (!name.trim()) { alert("이름을 입력해주세요"); return }
+const phoneDigits = phone.replace(/[^0-9]/g, "")
+if (phoneDigits.length !== 11) { alert("연락처를 정확히 입력해주세요 (11자리)"); return }
+onAdd({ name, phone })
+if (isDemo) setDemoRows(prev => [...prev, { name, phone }])
+setName("")
+setPhone("")
+}
+
 const handleDelete = (idx: number) => {
 if (!window.confirm("정말 삭제하시겠습니까?")) return
 if (isDemo) setDemoRows(rows => rows.filter((_, i) => i !== idx))
 else onRemove(idx)
-alert("삭제되었습니다.")
+}
+
+const handleSendClick = () => {
+handleSendNotification(currentList.length)
 }
 
 const columns: Column[] = [
@@ -130,7 +127,7 @@ return (
 <div dangerouslySetInnerHTML={{ __html: tableStyle }} />
 <div className="border border-gray-100 rounded-xl md:rounded-2xl p-3 md:p-4">
 <div className="flex justify-between items-center mb-3 md:mb-4">
-<h3 className={`${TEXT_PRIMARY} font-semibold ${TEXT_SIZE}`}>참석자 등록하기</h3>
+<h3 className={`${TEXT_PRIMARY} font-semibold ${TEXT_SIZE}`}>참석자 지정</h3>
 <Button variant="action" onClick={() => setLoadModalOpen(true)} className={`${BTN_HEIGHT} ${TEXT_SIZE} flex items-center justify-center gap-1`}>
 <Users size={16} className="md:w-[18px] md:h-[18px]" />불러오기
 </Button>
@@ -165,7 +162,7 @@ if (!/[0-9]/.test(e.key) && !["Backspace", "ArrowLeft", "ArrowRight", "Delete", 
 }}
 />
 </div>
-<Button variant="primary" onClick={triggerAdd} className={`${BTN_HEIGHT} ${TEXT_SIZE} shrink-0 w-full lg:w-auto flex items-center justify-center gap-1`}>
+<Button variant="primary" onClick={handleAddClick} className={`${BTN_HEIGHT} ${TEXT_SIZE} shrink-0 w-full lg:w-auto flex items-center justify-center gap-1`}>
 <Plus size={16} className="md:w-[18px] md:h-[18px]" />추가
 </Button>
 </div>
@@ -176,8 +173,8 @@ if (!/[0-9]/.test(e.key) && !["Backspace", "ArrowLeft", "ArrowRight", "Delete", 
 <div className={`w-full text-center text-gray-400 mt-6 ${TEXT_SIZE} select-none`}>등록된 참석자가 없습니다</div>
 )}
 <div className="flex justify-end mt-3 md:mt-4">
-<Button variant="action" onClick={handleSubmit} className={`${BTN_HEIGHT} ${TEXT_SIZE} flex items-center gap-1`}>
-<Send size={16} className="md:w-[18px] md:h-[18px]" />참석자 서명 전송하기
+<Button variant="action" onClick={handleSendClick} className={`${BTN_HEIGHT} ${TEXT_SIZE} flex items-center gap-1`}>
+<Send size={16} className="md:w-[18px] md:h-[18px]" />전송하기
 </Button>
 </div>
 </div>

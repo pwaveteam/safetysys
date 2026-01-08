@@ -213,7 +213,7 @@ return(
 <section className="w-full relative"style={{minHeight:"900px",paddingBottom:"200px"}}>
 <PageTitle>TBM {isEdit?"편집":"등록"}</PageTitle>
 <div className="flex flex-col lg:flex-row gap-4 items-start">
-<div className="w-full lg:w-[50%] border border-[#F3F3F3] rounded-[16px] p-3"style={{minHeight:"700px"}}>
+<div className="w-full lg:flex-[6] border border-[#F3F3F3] rounded-[16px] p-3"style={{minHeight:"700px"}}>
 <FormScreen
 fields={fields}
 values={values}
@@ -236,7 +236,7 @@ addRiskItem={()=>addRiskItem(process)}
 />
 )}
 </div>
-<aside className="w-full lg:flex-1 lg:min-w-[400px] flex flex-col gap-6"style={{minHeight:"700px"}}>
+<aside className="w-full lg:flex-[4] flex flex-col gap-6"style={{minHeight:"700px"}}>
 <PageTitle className="block lg:hidden">참석자 목록</PageTitle>
 <div className="w-full">
 <AttendeePanel attendees={attendeesList}onAdd={handleAddAttendee}onRemove={handleRemoveAttendee}/>

@@ -12,6 +12,8 @@ import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard/Dashboard"
 
 import Inspection from "./pages/Inspection/Inspection"
+import InspectionChecklist from "./pages/Inspection/InspectionChecklist"
+import InspectionRoutine from "./pages/Inspection/InspectionRoutine"
 
 import TBM from "./pages/TBM/TBM"
 import TBMRegister from "./pages/TBM/TBMRegister"
@@ -42,7 +44,6 @@ import SafeVoice from "./pages/NearMiss/SafeVoice"
 
 import EducationList from "./pages/SafetyEducation/Education"
 import EducationRegister from "./pages/SafetyEducation/EducationRegister"
-import EducationCertificate from "./pages/SafetyEducation/EducationCertificate"
 
 import AssetMachine from "./pages/AssetManagement/AssetMachine"
 import AssetHazard from "./pages/AssetManagement/AssetHazard"
@@ -104,6 +105,8 @@ return (
 
 <Route path="/inspection" element={<Inspection />} />
 <Route path="/inspection/results" element={<Inspection />} />
+<Route path="/inspection/checklist" element={<InspectionChecklist />} />
+<Route path="/inspection/routine" element={<InspectionRoutine />} />
 
 <Route path="/tbm" element={<TBM />} />
 <Route path="/tbm/register" element={<TBMRegister />} />
@@ -115,7 +118,6 @@ return (
 <Route path="/safety-education" element={<Navigate to="/safety-education/education" replace />} />
 <Route path="/safety-education/education" element={<EducationList />} />
 <Route path="/safety-education/register" element={<EducationRegister />} />
-<Route path="/safety-education/certificate" element={<EducationCertificate />} />
 
 <Route path="/asset-management" element={<Navigate to="/asset-management/machine" replace />} />
 <Route path="/asset-management/machine" element={<AssetMachine />} />

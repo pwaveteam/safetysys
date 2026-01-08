@@ -6,6 +6,7 @@ import DataTable,{Column,DataRow}from"@/components/common/tables/DataTable"
 import TabMenu from"@/components/common/base/TabMenu"
 import PageTitle from"@/components/common/base/PageTitle"
 import Pagination from"@/components/common/base/Pagination"
+import AttendeeListDialog from"@/components/dialog/AttendeeListDialog"
 import usePagination from"@/hooks/usePagination"
 import useTabNavigation from"@/hooks/useTabNavigation"
 import useFilterBar from"@/hooks/useFilterBar"
@@ -14,23 +15,36 @@ import{CirclePlus,Trash2,FileSpreadsheet,Printer}from"lucide-react"
 import{tbmListMockData}from"@/data/mockData"
 import{DocumentTemplate}from"@/components/snippetDocument/printDocument"
 
-type TBMRow=DataRow&{id:number|string;tbm:string;eduDate:string;eduTime:string;targetText:string;participantsText:string;leader:string;sitePhotos:string[]}
+interface Attendee{name:string;phone:string;signed:boolean}
+type TBMRow=DataRow&{id:number|string;tbm:string;eduDate:string;eduTime:string;leader:string;sitePhotos:string[];attendees:Attendee[]}
 
 const TAB_LABELS=["TBM"]
 const TAB_PATHS=["/tbm"]
 
-const tbmColumns:Column[]=[
+const getColumns=(onAttendeeClick:(row:TBMRow)=>void):Column<TBMRow>[]=>([
 {key:"index",label:"번호",type:"index"},
 {key:"tbm",label:"TBM명"},
 {key:"eduDate",label:"실시일"},
 {key:"eduTime",label:"진행시간"},
-{key:"targetText",label:"대상"},
-{key:"participantsText",label:"참여"},
+{key:"attendees",label:"참석자",align:"center",renderCell:(row)=>{
+const attendees=row.attendees||[]
+return(
+<div className="flex items-center justify-center gap-2">
+<span className="text-xs md:text-[13px] text-gray-800">{attendees.length}명</span>
+<Button
+variant="mutedGray"
+onClick={(e)=>{e.stopPropagation();onAttendeeClick(row)}}
+className="text-[11px] h-[26px] px-2 border cursor-pointer hover:opacity-80"
+>
+보기
+</Button>
+</div>
+)}},
 {key:"leader",label:"실시자"},
 {key:"sitePhotos",label:"현장사진",type:"photo"},
 {key:"attachments",label:"첨부파일",type:"download"},
 {key:"manage",label:"관리",type:"manage"}
-]
+])
 
 const createTBMTemplate=(row:TBMRow):DocumentTemplate=>({
 id:`tbm-${row.id}`,
@@ -42,8 +56,7 @@ fields:[
 {label:"TBM명",value:row.tbm,type:"text",section:"overview"},
 {label:"실시일",value:row.eduDate,type:"date",section:"overview"},
 {label:"진행시간",value:row.eduTime,type:"text",section:"overview"},
-{label:"대상",value:row.targetText,type:"text",section:"overview"},
-{label:"참여",value:row.participantsText,type:"text",section:"overview"},
+{label:"참석자",value:`${row.attendees?.length||0}명`,type:"text",section:"overview"},
 {label:"실시자",value:row.leader,type:"text",section:"overview"},
 ...(row.sitePhotos?.length?[{label:"현장사진",value:row.sitePhotos,type:"photos"as const,section:"content"as const}]:[])
 ]
@@ -54,7 +67,14 @@ const navigate=useNavigate()
 const[selectedIds,setSelectedIds]=useState<(number|string)[]>([])
 const[photoPreview,setPhotoPreview]=useState<{open:boolean;images:string[];index:number}>({open:false,images:[],index:0})
 const[data,setData]=useState<TBMRow[]>(tbmListMockData as TBMRow[])
-const{startDate,endDate,searchText,setStartDate,setEndDate,setSearchText,filteredData,handleSearch}=useFilterBar({data,dateKey:"eduDate",searchKeys:["tbm","leader","targetText"]})
+const[attendeeDialog,setAttendeeDialog]=useState<{open:boolean;attendees:Attendee[]}>({open:false,attendees:[]})
+
+const handleAttendeeClick=(row:TBMRow)=>{
+setAttendeeDialog({open:true,attendees:row.attendees||[]})
+}
+
+const tbmColumns=getColumns(handleAttendeeClick)
+const{startDate,endDate,searchText,setStartDate,setEndDate,setSearchText,filteredData,handleSearch}=useFilterBar({data,dateKey:"eduDate",searchKeys:["tbm","leader"]})
 const{currentIndex,handleTabClick}=useTabNavigation(TAB_PATHS)
 const{currentPage,totalPages,currentData,onPageChange}=usePagination<TBMRow>(filteredData as TBMRow[],30)
 
@@ -107,6 +127,11 @@ onManageClick={()=>navigate("/tbm/register",{state:{mode:"edit"}})}
 />
 </div>
 <Pagination currentPage={currentPage}totalPages={totalPages}onPageChange={onPageChange}/>
+<AttendeeListDialog
+isOpen={attendeeDialog.open}
+onClose={()=>setAttendeeDialog({open:false,attendees:[]})}
+attendees={attendeeDialog.attendees}
+/>
 </section>
 )
 }
