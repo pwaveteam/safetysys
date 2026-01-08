@@ -17,7 +17,7 @@ templateName: string
 items: ItemRow[]
 }
 
-interface InspectionChecklistDialogProps {
+interface InspectionChecklistRegisterProps {
 open: boolean
 onClose: () => void
 }
@@ -33,7 +33,7 @@ id: row.id,
 template: row.template
 }))
 
-export default function InspectionChecklistDialog({ open, onClose }: InspectionChecklistDialogProps) {
+export default function InspectionChecklistRegister({ open, onClose }: InspectionChecklistRegisterProps) {
 const [data, setData] = useState<ChecklistRow[]>(initialData)
 const [selectedId, setSelectedId] = useState<number | string | null>(null)
 const [editingData, setEditingData] = useState<EditingChecklist | null>(null)

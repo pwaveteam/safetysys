@@ -51,7 +51,7 @@ validateVerificationCode: (value: string, expectedCode: string, fieldName?: stri
 }
 
 const defaultMessages = {
-required: "필수 입력 항목입니다.",
+required: "필수입력 항목입니다.",
 minLength: (min: number) => `${min}자 이상 입력해주세요.`,
 maxLength: (max: number) => `최대 ${max}자까지 입력 가능합니다.`,
 pattern: "올바른 형식으로 입력해주세요.",

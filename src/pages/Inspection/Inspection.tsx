@@ -3,10 +3,10 @@ import Button from "@/components/common/base/Button"
 import DataTable, { Column, DataRow } from "@/components/common/tables/DataTable"
 import PageTitle from "@/components/common/base/PageTitle"
 import Pagination from "@/components/common/base/Pagination"
-import InspectionChecklistDialog from "@/components/dialog/InspectionChecklistDialog"
-import InspectionResultViewDialog from "@/components/dialog/InspectionResultViewDialog"
-import SafetyPatrolDialog from "@/components/dialog/SafetyPatrolDialog"
-import InspectionPlanRegisterDialog from "@/components/dialog/InspectionPlanRegisterDialog"
+import InspectionChecklistRegister from "@/pages/Inspection/InspectionChecklistRegister"
+import InspectionResultView from "@/pages/Inspection/InspectionResultView"
+import InspectionRoutineRegister from "@/pages/Inspection/InspectionRoutineRegister"
+import InspectionPlanRegister from "@/pages/Inspection/InspectionPlanRegister"
 import usePagination from "@/hooks/usePagination"
 import useHandlers from "@/hooks/useHandlers"
 import { ClipboardList, CirclePlus, ChevronLeft, ChevronRight, Eye, SquareCheck, Trash2 } from "lucide-react"
@@ -114,40 +114,7 @@ const KIND_OPTIONS = [
 { value: "특별점검", label: "특별점검" }
 ]
 
-const columns: Column<InspectionRow>[] = [
-{ key: "index", label: "번호", type: "index" },
-{ key: "template", label: "점검표명", minWidth: 180 },
-{ key: "workplace", label: "장소" },
-{ key: "field", label: "분야" },
-{ key: "kind", label: "종류" },
-{ key: "schedule", label: "점검일정", minWidth: 150 },
-{ key: "inspector", label: "점검자" },
-{ key: "registeredAt", label: "최종등록일", minWidth: 120 },
-{
-key: "status",
-label: "상태",
-align: "center",
-minWidth: 90,
-renderCell: (row) => {
-if (row.status === "완료") {
-return (
-<button className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition-colors whitespace-nowrap">
-<Eye size={12} />
-점검완료
-</button>
-)
-}
-return (
-<button className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-lg bg-[var(--primary)] text-white hover:opacity-90 transition-opacity whitespace-nowrap">
-<SquareCheck size={12} />
-점검하기
-</button>
-)
-}
-}
-]
-
-export default function InspectionResults() {
+export default function Inspection() {
 const [currentWeekStart, setCurrentWeekStart] = useState(() => {
 const today = new Date()
 const day = today.getDay()
@@ -246,6 +213,39 @@ setSelectedResult(row)
 setIsResultViewOpen(true)
 }
 }
+
+const columns: Column<InspectionRow>[] = [
+{ key: "index", label: "번호", type: "index" },
+{ key: "kind", label: "종류" },
+{ key: "template", label: "점검표명", minWidth: 180 },
+{ key: "workplace", label: "장소" },
+{ key: "field", label: "분야" },
+{ key: "schedule", label: "점검일정", minWidth: 150 },
+{ key: "inspector", label: "점검자" },
+{ key: "registeredAt", label: "최종등록일", minWidth: 120 },
+{
+key: "status",
+label: "상태",
+align: "center",
+minWidth: 90,
+renderCell: (row) => {
+if (row.status === "완료") {
+return (
+<button onClick={() => handleRowClick(row)} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition-colors whitespace-nowrap">
+<Eye size={12} />
+점검완료
+</button>
+)
+}
+return (
+<button onClick={() => alert("점검하기 기능은 준비중입니다.")} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-lg bg-[var(--primary)] text-white hover:opacity-90 transition-opacity whitespace-nowrap">
+<SquareCheck size={12} />
+점검하기
+</button>
+)
+}
+}
+]
 
 const SELECT_CLASS = "border border-[var(--border)] rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:border-[var(--primary)] transition-colors cursor-pointer"
 
@@ -354,8 +354,6 @@ isToday ? "text-[var(--primary)]"
 <h3 className="text-sm font-semibold text-gray-800 mb-4">점검관리</h3>
 
 <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-<span className="text-gray-600 text-sm">총 {filteredData.length}건</span>
-
 <div className="flex flex-wrap items-center gap-1">
 <select
 value={statusFilter}
@@ -394,6 +392,8 @@ onChange={e => setSearchText(e.target.value)}
 placeholder="검색어 입력"
 className="border border-[var(--border)] rounded-lg px-3 py-1.5 text-sm w-40 focus:outline-none focus:border-[var(--primary)] transition-colors"
 />
+</div>
+<div className="flex flex-wrap items-center gap-1">
 <Button variant="action" onClick={() => setIsPlanRegisterOpen(true)} className="flex items-center gap-1">
 <CirclePlus size={16} />신규등록
 </Button>
@@ -420,12 +420,12 @@ onManageClick={handleRowClick}
 </div>
 </div>
 
-<InspectionChecklistDialog
+<InspectionChecklistRegister
 open={isChecklistDialogOpen}
 onClose={() => setIsChecklistDialogOpen(false)}
 />
 
-<InspectionResultViewDialog
+<InspectionResultView
 open={isResultViewOpen}
 onClose={() => {
 setIsResultViewOpen(false)
@@ -444,13 +444,13 @@ notes: selectedResult.notes || ""
 } : null}
 />
 
-<SafetyPatrolDialog
+<InspectionRoutineRegister
 open={isPatrolDialogOpen}
 onClose={() => setIsPatrolDialogOpen(false)}
 mode={patrolDialogMode}
 />
 
-<InspectionPlanRegisterDialog
+<InspectionPlanRegister
 open={isPlanRegisterOpen}
 onClose={() => setIsPlanRegisterOpen(false)}
 />

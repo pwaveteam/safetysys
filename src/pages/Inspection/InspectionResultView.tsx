@@ -22,7 +22,7 @@ confirmed: boolean
 note: string
 }
 
-interface InspectionResultViewDialogProps {
+interface InspectionResultViewProps {
 open: boolean
 onClose: () => void
 data: ResultRow | null
@@ -40,7 +40,7 @@ const BORDER_CLASS = "border-[var(--border)]"
 const TEXT_PRIMARY = "text-gray-800"
 const TEXT_SECONDARY = "text-gray-500"
 
-export default function InspectionResultViewDialog({ open, onClose, data }: InspectionResultViewDialogProps) {
+export default function InspectionResultView({ open, onClose, data }: InspectionResultViewProps) {
 const printRef = useRef<HTMLDivElement>(null)
 
 const handlePrint = useReactToPrint({
