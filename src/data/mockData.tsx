@@ -1,6 +1,5 @@
 import { DataRow } from "@/components/common/tables/DataTable"
 
-// 랜덤 현장사진 생성 (3~6장)
 const getRandomPhotos = (seed: number): string[] => {
   const photoCount = 3 + (seed % 4) // 3~6장
   const allPhotos = Array.from({ length: 11 }, (_, i) => `/images/photo${i + 1}.jpg`)
@@ -179,20 +178,20 @@ export const inspectionChecklistMockData: DataRow[] = [
 ]
 
 export const inspectionResultsMockData: DataRow[] = [
-  { id: 1, template: "컨베이어 LOTOTO 최종 점검표", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "윤영광", inspectedAt: "2025-12-02(화)", confirmed: false, notes: "LOTOTO 해제 전 3단계 확인 미흡." },
-  { id: 2, template: "중량물 운반 작업 안전점검표", workplace: "소형밀 실", field: "자산(설비)", kind: "특별점검", inspector: "장감독", inspectedAt: "2025-12-04(목)", confirmed: true, notes: "2인 1조 작업 원칙 준수 확인." },
-  { id: 3, template: "분진 작업 환경 측정 기록", workplace: "(주)에스피에스앤아이 당진 슬래그공장", field: "시설물", kind: "수시점검", inspector: "배소장", inspectedAt: "2025-12-05(금)", confirmed: true, notes: "분진 농도 기준치 이하 측정됨." },
-  { id: 4, template: "소형밀 내부 점검 기록", workplace: "소형밀 실", field: "자산(설비)", kind: "특별점검", inspector: "문반장", inspectedAt: "2025-12-13(토)", confirmed: true, notes: "내부 잔류물 제거 및 지정 오일 주입 완료." },
-  { id: 5, template: "유압 라인 점검 결과서", workplace: "Slag Mill 실", field: "자산(설비)", kind: "수시점검", inspector: "오감독", inspectedAt: "2025-12-11(목)", confirmed: true, notes: "고온 작업 후 냉각 상태 및 압력 정상 확인." },
-  { id: 6, template: "협소/고소 작업 안전 점검표", workplace: "(주)에스피에스앤아이 당진 슬래그공장", field: "시설물", kind: "특별점검", inspector: "정안전", inspectedAt: "2025-12-19(금)", confirmed: false, notes: "안전벨트 체결 불량 1건 적발. 현장 교육 조치." },
-  { id: 7, template: "HSLM 오일 보충 위험성평가 이행 결과", workplace: "Slag Mill 실", field: "자산(설비)", kind: "수시점검", inspector: "박관리", inspectedAt: "2025-12-12(금)", confirmed: true, notes: "고임목 설치 및 유출 오일 즉시 제거 완료." },
-  { id: 8, template: "어큐뮬레이터 교체 완료 점검표", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "최정비", inspectedAt: "2025-12-18(목)", confirmed: true, notes: "질소 압력 및 유압 라인 누설 없음." },
-  { id: 9, template: "작업허가서(PTW) 최종 확인 기록", workplace: "Slag Mill 실", field: "자산(설비)", kind: "수시점검", inspector: "김현장", inspectedAt: "2025-12-10(화)", confirmed: true, notes: "작업 완료 후 잔재물 및 안전 펜스 정리됨." },
-  { id: 10, template: "LOTO 시스템 정기 점검표", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "이안전", inspectedAt: "2025-12-16(화)", confirmed: false, notes: "전기 차단점 1곳 태그 마모 확인. 재발급 조치 필요." },
-  { id: 11, template: "슬래그 밀 메인 베어링 오일 분석 결과서", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "오영수", inspectedAt: "2025-12-22(월)", confirmed: true, notes: "마모 입자 없음. 오일 상태 양호." }
+  { id: 1, template: "컨베이어 LOTOTO 최종 점검표", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "윤영광", inspectedAt: "2025-12-02(화)", confirmed: false, notes: "LOTOTO 해제 전 3단계 확인 미흡" },
+  { id: 2, template: "중량물 운반 작업 안전점검표", workplace: "소형밀 실", field: "자산(설비)", kind: "특별점검", inspector: "장감독", inspectedAt: "2025-12-04(목)", confirmed: true, notes: "2인 1조 작업 원칙 준수 확인" },
+  { id: 3, template: "분진 작업 환경 측정 기록", workplace: "(주)에스피에스앤아이 당진 슬래그공장", field: "시설물", kind: "수시점검", inspector: "배소장", inspectedAt: "2025-12-05(금)", confirmed: true, notes: "분진 농도 기준치 이하 측정됨" },
+  { id: 4, template: "소형밀 내부 점검 기록", workplace: "소형밀 실", field: "자산(설비)", kind: "특별점검", inspector: "문반장", inspectedAt: "2025-12-13(토)", confirmed: true, notes: "내부 잔류물 제거 및 지정 오일 주입 완료" },
+  { id: 5, template: "유압 라인 점검 결과서", workplace: "Slag Mill 실", field: "자산(설비)", kind: "수시점검", inspector: "오감독", inspectedAt: "2025-12-11(목)", confirmed: true, notes: "고온 작업 후 냉각 상태 및 압력 정상 확인" },
+  { id: 6, template: "협소/고소 작업 안전 점검표", workplace: "(주)에스피에스앤아이 당진 슬래그공장", field: "시설물", kind: "특별점검", inspector: "정안전", inspectedAt: "2025-12-19(금)", confirmed: false, notes: "안전벨트 체결 불량 1건 적발. 현장 교육 조치" },
+  { id: 7, template: "HSLM 오일 보충 위험성평가 이행 결과", workplace: "Slag Mill 실", field: "자산(설비)", kind: "수시점검", inspector: "박관리", inspectedAt: "2025-12-12(금)", confirmed: true, notes: "고임목 설치 및 유출 오일 즉시 제거 완료" },
+  { id: 8, template: "어큐뮬레이터 교체 완료 점검표", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "최정비", inspectedAt: "2025-12-18(목)", confirmed: true, notes: "질소 압력 및 유압 라인 누설 없음" },
+  { id: 9, template: "작업허가서(PTW) 최종 확인 기록", workplace: "Slag Mill 실", field: "자산(설비)", kind: "수시점검", inspector: "김현장", inspectedAt: "2025-12-10(화)", confirmed: true, notes: "작업 완료 후 잔재물 및 안전 펜스 정리됨" },
+  { id: 10, template: "LOTO 시스템 정기 점검표", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "이안전", inspectedAt: "2025-12-16(화)", confirmed: false, notes: "전기 차단점 1곳 태그 마모 확인. 재발급 조치 필요" },
+  { id: 11, template: "슬래그 밀 메인 베어링 오일 분석 결과서", workplace: "Slag Mill 실", field: "자산(설비)", kind: "특별점검", inspector: "오영수", inspectedAt: "2025-12-22(월)", confirmed: true, notes: "마모 입자 없음. 오일 상태 양호" }
 ]
 
-// Safety Education
+// 안전교육
 export const safetyEducationMockData: DataRow[] = [
   { id: 1, course: "작업내용 변경 시 교육", targetGroup: "밀폐공간 진입 작업자", eduName: "밀폐공간 작업 특별 안전 교육", date: "2025-12-08(월)", trainer: "김안전", sitePhotos: getRandomPhotos(41), eduMaterial: "밀폐공간_안전지침.pdf", proof: "참석자 서명부", manage: "인렛슈트 코팅 제거 전" },
   { id: 2, course: "특별교육", targetGroup: "고소/중량물 작업자", eduName: "고소 및 중량물 취급 특별 안전 교육", date: "2025-12-15(월)", trainer: "박안전", sitePhotos: getRandomPhotos(42), eduMaterial: "고소작업_매뉴얼.pptx", proof: "평가 기록", manage: "어큐뮬레이터 교체 전" },
@@ -206,7 +205,7 @@ export const safetyEducationMockData: DataRow[] = [
   { id: 10, course: "정기교육", targetGroup: "관리감독자", eduName: "관리감독자 정기 안전보건 교육", date: "2025-11-30(일)", trainer: "안전팀장", sitePhotos: getRandomPhotos(50), eduMaterial: "감독자_책임과_역할.pdf", proof: "이수 확인", manage: "법정 정기 교육" }
 ]
 
-// TBM
+// TBM 목록
 export const tbmListMockData: DataRow[] = [
   { id: 1, tbm: "밀폐공간 진입 안전수칙 및 감시인 역할 교육", date: "2025-12-10(화)", start: "08:30", end: "09:00", leader: "이호성", sitePhotos: getRandomPhotos(51), eduDate: "2025-12-10(화)", eduTime: "08:30 ~ 09:00 (30분)", attachments: true, attendees: [{ name: "김철수", phone: "010-1234-5678", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-10 08:32" }, { name: "이영희", phone: "010-2345-6789", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-10 08:33" }, { name: "박민수", phone: "010-3456-7890", signed: false }, { name: "최정아", phone: "010-4567-8901", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-10 08:36" }, { name: "정대현", phone: "010-5678-9012", signed: false }] },
   { id: 2, tbm: "LOTOTO 실시 절차 및 에너지 차단 확인 교육", date: "2025-12-01(월)", start: "07:30", end: "08:00", leader: "김민수", sitePhotos: getRandomPhotos(52), eduDate: "2025-12-01(월)", eduTime: "07:30 ~ 08:00 (30분)", attachments: false, attendees: [{ name: "홍길동", phone: "010-1111-2222", signed: true, signature: "/images/signature-4.png", signedAt: "2025-12-01 07:32" }, { name: "김안전", phone: "010-2222-3333", signed: true, signature: "/images/signature-5.png", signedAt: "2025-12-01 07:34" }, { name: "이현장", phone: "010-3333-4444", signed: true, signature: "/images/signature-1.png", signedAt: "2025-12-01 07:35" }, { name: "박감독", phone: "010-4444-5555", signed: true, signature: "/images/signature-2.png", signedAt: "2025-12-01 07:37" }, { name: "최관리", phone: "010-5555-6666", signed: true, signature: "/images/signature-3.png", signedAt: "2025-12-01 07:38" }] },
@@ -262,7 +261,7 @@ export const assetHazardMockData: DataRow[] = [
   { id: 10, chemicalName: "질소 (고압가스)", casNo: "7727-37-9", exposureLimit: "N/A", dailyUsage: "N/A", storageAmount: "20 Cyl", registrationDate: "2025-03-30(일)", msds: "MSDS-010.pdf", manage: "용기 전도 방지 및 잔압 확인" }
 ]
 
-// Supply Chain
+// 협력업체
 export const partnersMockData: DataRow[] = [
   { id: 1, company: "대진설비보전", contractPeriod: "2025-04-01 ~ 2026-03-31", manager: "최정비", contact: "010-9999-1111", planFile: "계획서_대진.pdf", etcFile: "", manage: "슬래그 밀 정비 전담" },
   { id: 2, company: "동아하역물류", contractPeriod: "2025-07-01 ~ 2026-06-30", manager: "이하준", contact: "010-8888-2222", planFile: "계획서_동아.pdf", etcFile: "안전교육_동아.zip", manage: "슬래그 제품 운반" },
@@ -306,7 +305,7 @@ export const trainingMockData: DataRow[] = [
   { id: 6, name: "협의체 F (특수)", riskAssessment: { text: "완료", color: "blue" }, hazardousMaterial: { text: "미완료", color: "red" }, responseManual: { text: "미완료", color: "red" }, allSigned: { text: "완료", color: "blue" }, updatedAt: "2025-12-18(수)" }
 ]
 
-// Notice
+// 게시판
 export const noticeMockData: DataRow[] = [
   { id: 1, title: "[필독] 12월 슬래그 밀 정기 정비 기간 안전 수칙 준수 강조", author: "홍길동", date: "2025-12-01(월)", views: 250, fileAttach: true },
   { id: 2, title: "[안내] 위험 작업 허가제(PTW) 시스템 개편에 따른 사용 교육 일정", author: "박관리", date: "2025-11-28(금)", views: 188, fileAttach: false },
@@ -332,14 +331,14 @@ export const lawMockData: DataRow[] = [
 ]
 
 export const receivedApprovalMockData: DataRow[] = [
-  { id: 1, date: "2025-12-17(수)", type: "작업위험분석(JSA)", content: "Master Roller 어큐뮬레이터 교체 위험분석", drafter: "최정비", status: { text: "결재대기", color: "orange" } },
-  { id: 2, date: "2025-12-13(토)", type: "현장위험성평가", content: "소형밀 내부 잔류물 청소 위험성평가", drafter: "문반장", status: { text: "결재대기", color: "orange" } },
-  { id: 3, date: "2025-12-12(금)", type: "위험작업허가서", content: "HSLM 유압 오일 보충 작업 허가 요청", drafter: "이정아", status: { text: "결재완료", color: "blue" } },
-  { id: 4, date: "2025-12-10(화)", type: "TBM 안전일지", content: "밀폐공간 진입 안전수칙 TBM 기록", drafter: "이호성", status: { text: "결재완료", color: "blue" } },
-  { id: 5, date: "2025-12-05(금)", type: "위험작업허가서", content: "컨베이어 벨트 용접 작업 허가 요청", drafter: "김철수", status: { text: "반려", color: "red" } },
-  { id: 6, date: "2025-12-04(목)", type: "점검결과 보고서", content: "중량물 운반 안전 점검 결과 보고", drafter: "장감독", status: { text: "결재완료", color: "blue" } },
-  { id: 7, date: "2025-12-02(화)", type: "협력업체 평가서", content: "협력업체 B 안전보건수준 재평가서", drafter: "박안전", status: { text: "결재대기", color: "orange" } },
-  { id: 8, date: "2025-11-20(목)", type: "TBM 안전일지", content: "전기 설비 정기 점검 TBM 기록", drafter: "김민수", status: { text: "결재완료", color: "blue" } }
+  { id: 1, date: "2025-12-17(수)", type: "위험성평가", content: "Master Roller 어큐뮬레이터 교체 위험분석", drafter: "최정비", status: { text: "결재대기", color: "orange" } },
+  { id: 2, date: "2025-12-13(토)", type: "위험성평가", content: "소형밀 내부 잔류물 청소 위험성평가", drafter: "문반장", status: { text: "결재대기", color: "orange" } },
+  { id: 3, date: "2025-12-12(금)", type: "작업중지요청", content: "HSLM 유압 오일 보충 작업 허가 요청", drafter: "이정아", status: { text: "결재완료", color: "blue" } },
+  { id: 4, date: "2025-12-10(화)", type: "TBM", content: "밀폐공간 진입 안전수칙 TBM 기록", drafter: "이호성", status: { text: "결재완료", color: "blue" } },
+  { id: 5, date: "2025-12-05(금)", type: "안전점검", content: "컨베이어 벨트 용접 작업 허가 요청", drafter: "김철수", status: { text: "반려", color: "red" } },
+  { id: 6, date: "2025-12-04(목)", type: "안전점검", content: "중량물 운반 안전 점검 결과 보고", drafter: "장감독", status: { text: "결재완료", color: "blue" } },
+  { id: 7, date: "2025-12-02(화)", type: "안전보건교육", content: "협력업체 B 안전보건수준 재평가서", drafter: "박안전", status: { text: "결재대기", color: "orange" } },
+  { id: 8, date: "2025-11-20(목)", type: "TBM", content: "전기 설비 정기 점검 TBM 기록", drafter: "김민수", status: { text: "결재완료", color: "blue" } }
 ]
 
 export const sentApprovalMockData: DataRow[] = [
@@ -352,7 +351,7 @@ export const sentApprovalMockData: DataRow[] = [
   { id: 7, date: "2025-11-25(화)", documentType: "점검보고", document: "점검보고", content: "협력업체 안전보건 관리 실태 점검 보고", status: { text: "반려", color: "red" }, progress: "1/3", finalApprover: "김공장장" }
 ]
 
-// Safety Work Permit
+// 작업허가서
 export const safetyWorkPermitMockData: DataRow[] = [
   { id: 1, workType: "용접 (화기 작업)", workerCount: "3명", hazardLevel: "높음", workPeriod: "2025-12-01 ~ 2025-12-02", registrationDate: "2025-11-29", approvalStatus: { text: "완료", color: "blue" }, attachment: "화기_PTW.pdf", manage: "컨베이어 벨트 보수" },
   { id: 2, workType: "밀폐공간 진입", workerCount: "2명", hazardLevel: "높음", workPeriod: "2025-12-10 ~ 2025-12-10", registrationDate: "2025-12-08", approvalStatus: { text: "완료", color: "blue" }, attachment: "밀폐_PTW.pdf", manage: "인렛 슈트 내부 청소" },
@@ -361,7 +360,7 @@ export const safetyWorkPermitMockData: DataRow[] = [
   { id: 5, workType: "중량물 양중 작업", workerCount: "3명", hazardLevel: "중간", workPeriod: "2025-12-04 ~ 2025-12-04", registrationDate: "2025-12-03", approvalStatus: { text: "반려", color: "red" }, attachment: "", manage: "장비 이동/설치" }
 ]
 
-// Response Manual
+// 비상대응매뉴얼
 export const responseManualMockData: DataRow[] = [
   { id: 1, title: "(중대재해) 슬래그 밀 내부 협착/끼임 사고 발생 시 비상 대응 절차", author: "홍길동", date: "2025-12-05(금)", views: 860, fileAttach: true },
   { id: 2, title: "(밀폐공간) 인렛 슈트 및 사일로 밀폐공간 진입 및 구조 매뉴얼", author: "김안전", date: "2025-12-10(화)", views: 350, fileAttach: true },
@@ -370,16 +369,7 @@ export const responseManualMockData: DataRow[] = [
   { id: 5, title: "(산업안전) 작업 전 LOTOTO 실시 및 해제 단계별 표준 매뉴얼", author: "이감독", date: "2025-12-01(월)", views: 780, fileAttach: true }
 ]
 
-// QR
-export const qrManagementMockData = [
-  { id: 5, qrName: "근로자 앱 사용 가이드 QR", link: "근로자용 사용법 안내", useStatus: true },
-  { id: 4, qrName: "관리자 사용 가이드 QR", link: "관리자용 사용 설명서", useStatus: true },
-  { id: 3, qrName: "종사자 의견청취 QR", link: "설문/건의 등 의견 수렴 폼 링크", useStatus: true },
-  { id: 2, qrName: "관리자 페이지 접속 QR", link: "관리자용 웹페이지 링크", useStatus: true },
-  { id: 1, qrName: "이수증 제출 QR", link: "안드로이드/iOS 다운로드 링크", useStatus: true }
-]
-
-// Routine Checklist Items (안전순회 점검항목)
+// 안전순회 점검항목
 export const routineChecklistItemsMockData = [
   { category: "보호구", items: [
     "작업에 적합한 보호구 준비 및 착용 여부",
@@ -446,4 +436,30 @@ export const routineChecklistItemsMockData = [
     "2인 이상 작업 시 커뮤니케이션 장비 존재",
     "기타 안전보건에 위반되는 행위 및 상태"
   ]}
+]
+
+// 점검일지 항목
+export interface InspectionCheckItem {
+  id: number
+  category?: string
+  content: string
+  status: "양호" | "불량" | ""
+  note: string
+  photos: string[]
+}
+
+export const inspectionLogInitialItems: InspectionCheckItem[] = [
+  { id: 1, category: "전기설비", content: "분전반 외함 파손·열화·부식 여부 및 표면 이물질 부착 상태 확인", status: "", note: "", photos: [] },
+  { id: 2, category: "전기설비", content: "누전차단기 시험버튼 동작 확인 및 동작 후 원위치 복귀 상태 점검", status: "", note: "", photos: [] },
+  { id: 3, category: "전기설비", content: "접지선 체결상태(풀림/탈락/손상) 및 접지저항 측정기록 최신성 확인", status: "", note: "", photos: [] },
+  { id: 4, category: "전기설비", content: "전선 피복 손상·가닥 노출·비규격 접속(테이프 임시처리 등) 사용 금지 여부", status: "", note: "", photos: [] },
+  { id: 5, category: "화재예방", content: "분전반 내부 과열 흔적(변색/그을음) 및 냄새 유무, 발열 부위 비접촉 온도계 점검", status: "", note: "", photos: [] },
+]
+
+export const inspectionLogViewItems: InspectionCheckItem[] = [
+  { id: 1, category: "전기설비", content: "분전반 외함 파손, 열화, 부식 여부 및 표면 이물질 부착 상태 확인", status: "양호", note: "", photos: [] },
+  { id: 2, category: "전기설비", content: "누전차단기 시험버튼 동작 확인 및 동작 후 원위치 복귀 상태 점검", status: "양호", note: "", photos: [] },
+  { id: 3, category: "전기설비", content: "접지선 체결상태(풀림, 탈락, 손상) 및 접지저항 측정기록 최신성 확인", status: "양호", note: "접지저항 측정 완료", photos: [] },
+  { id: 4, category: "전기설비", content: "전선 피복 손상, 가닥 노출, 비규격 접속(테이프 임시처리 등) 사용 금지 여부", status: "불량", note: "일부 피복 손상 발견, 교체 필요", photos: ["sample.jpg"] },
+  { id: 5, category: "화재예방", content: "분전반 내부 과열 흔적(변색, 그을음) 및 냄새 유무, 발열 부위 비접촉 온도계 점검", status: "양호", note: "", photos: [] },
 ]

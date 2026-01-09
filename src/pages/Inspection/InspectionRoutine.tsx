@@ -47,6 +47,7 @@ export default function InspectionRoutine({
   data,
 }: InspectionRoutineProps) {
   const printRef = useRef<HTMLDivElement>(null)
+  const printViewRef = useRef<HTMLDivElement>(null)
   const [formData, setFormData] = useState<{ [day: string]: { [itemId: string]: "O" | "X" | "" } }>({})
   const [inspectors, setInspectors] = useState<{ [day: string]: string }>({})
   const [signatures, setSignatures] = useState<{ [day: string]: string }>({})
@@ -54,9 +55,15 @@ export default function InspectionRoutine({
   const [notes, setNotes] = useState("")
   const [managerInstructions, setManagerInstructions] = useState("")
   const [checkDates, setCheckDates] = useState<{ [day: string]: string }>({})
+  const [selectedPrintItem, setSelectedPrintItem] = useState<RoutineListItem | null>(null)
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
+    documentTitle: "안전순회 점검일지",
+  })
+
+  const handlePrintView = useReactToPrint({
+    contentRef: printViewRef,
     documentTitle: "안전순회 점검일지",
   })
 
@@ -87,6 +94,17 @@ export default function InspectionRoutine({
   const isEditMode = mode === "edit"
   let itemIndex = 0
 
+  const handlePrintFromList = (id: string | number | (string | number)[] | null) => {
+    if (id === null || Array.isArray(id)) return
+    const item = ROUTINE_LIST_MOCK_DATA.find(i => i.id === id)
+    if (item) {
+      setSelectedPrintItem(item)
+      setTimeout(() => {
+        handlePrintView()
+      }, 100)
+    }
+  }
+
   return (
     <>
       <LoadListDialog<RoutineListItem>
@@ -98,7 +116,8 @@ export default function InspectionRoutine({
         emptyMessage="등록된 안전순회 점검일지가 없습니다."
         searchKeys={["inspector", "inspectionDate"]}
         actionLabel="인쇄"
-        actionDisabled={true}
+        singleSelect={true}
+        onChangeSelected={handlePrintFromList}
       />
 
       {registerOpen && (
@@ -354,6 +373,171 @@ export default function InspectionRoutine({
                 .print-content .h-10 { height: 22px !important; }
                 .print-content .notes-row td { white-space: normal !important; }
                 .print-content .notes-row th { white-space: normal !important; }
+              }
+            `}</style>
+          </div>
+        </div>
+      )}
+
+      {selectedPrintItem && (
+        <div className="hidden">
+          <div ref={printViewRef}>
+            <div className="print-content-list">
+              <div className="flex items-center mb-4">
+                <div className="flex-1 flex justify-center items-center">
+                  <h1 className="text-2xl font-semibold text-gray-900">안전순회 점검일지</h1>
+                </div>
+                <table className={`border-collapse border ${BORDER_CLASS} shrink-0`}>
+                  <tbody>
+                    <tr>
+                      <td rowSpan={2} className={`border ${BORDER_CLASS} px-2 py-2 ${TEXT_SIZE_XS} font-medium text-gray-700 text-center align-middle bg-gray-50 w-8`}>
+                        <div className="flex flex-col items-center gap-2.5">
+                          <span>결</span>
+                          <span>재</span>
+                        </div>
+                      </td>
+                      <td className={`border ${BORDER_CLASS} bg-gray-50 px-3 py-1 ${TEXT_SIZE_XS} font-medium text-gray-600 text-center w-16`}>담당</td>
+                      <td className={`border ${BORDER_CLASS} bg-gray-50 px-3 py-1 ${TEXT_SIZE_XS} font-medium text-gray-600 text-center w-16`}>검토</td>
+                      <td className={`border ${BORDER_CLASS} bg-gray-50 px-2 py-1 ${TEXT_SIZE_XS} font-medium text-gray-600 text-center whitespace-nowrap`}>관리책임자</td>
+                    </tr>
+                    <tr>
+                      <td className={`border ${BORDER_CLASS} h-10 w-16`}></td>
+                      <td className={`border ${BORDER_CLASS} h-10 w-16`}></td>
+                      <td className={`border ${BORDER_CLASS} h-10 w-16`}></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <table className={`w-full border-collapse border ${BORDER_CLASS}`}>
+                <tbody>
+                  <tr>
+                    <td className={HEADER_CELL_CLASS} style={{ width: '8%' }}>점검장소</td>
+                    <td className={`${CELL_CLASS} text-center`} style={{ width: '10%' }}>사업장 전체</td>
+                    <td className={HEADER_CELL_CLASS} style={{ width: '6%' }}>점검일</td>
+                    {DAYS.map((day, idx) => {
+                      const dateRange = selectedPrintItem.inspectionDate.split(" ~ ")
+                      const startDate = dateRange[0]?.split("-")[2] || ""
+                      return (
+                        <td key={day} className={`${CELL_CLASS} text-center`} style={{ width: `${76 / 7}%` }}>
+                          <div className="flex items-center justify-center gap-1 whitespace-nowrap">
+                            <span className={TEXT_SIZE_XS}>{String(Number(startDate) + idx).padStart(2, "0")}</span>
+                            <span className={`${TEXT_SIZE_XS} ${TEXT_SECONDARY}`}>/{day}</span>
+                          </div>
+                        </td>
+                      )
+                    })}
+                  </tr>
+
+                  <tr>
+                    <td rowSpan={3} colSpan={2} className={`${CELL_CLASS} ${TEXT_SIZE_XS} text-gray-600 align-middle text-center leading-relaxed`}>
+                      ※건설기계 등<br/>중장비 작업 시<br/>별도 점검일지 사용
+                    </td>
+                    <td className={HEADER_CELL_CLASS} style={{ width: '6%' }}>점검자</td>
+                    {DAYS.map(day => (
+                      <td key={day} className={`${CELL_CLASS} text-center`}>
+                        <span className={TEXT_SIZE_XS}>{selectedPrintItem.inspector}</span>
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className={HEADER_CELL_CLASS} style={{ width: '6%' }}>서명</td>
+                    {DAYS.map(day => (
+                      <td key={day} className={`${CELL_CLASS} text-center h-10`}></td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className={HEADER_CELL_CLASS} style={{ width: '6%' }}>출력인원</td>
+                    {DAYS.map(day => (
+                      <td key={day} className={`${CELL_CLASS} text-center`}>
+                        <span className={TEXT_SIZE_XS}>-</span>
+                      </td>
+                    ))}
+                  </tr>
+
+                  <tr>
+                    <td colSpan={3} className={HEADER_CELL_CLASS}>점 검 항 목</td>
+                    <td colSpan={7} className={`${HEADER_CELL_CLASS} text-left pl-3`}>
+                      점검결과 표시방법 <span className="inline-flex items-center gap-2 ml-2 px-2 py-0.5 bg-white rounded border border-gray-200 text-gray-700 font-normal"><span className="text-[var(--primary)] font-medium">O</span>:양호 / <span className="text-red-600 font-medium">X</span>:불량</span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className={HEADER_CELL_CLASS} style={{ width: '8%' }}>구분</td>
+                    <td colSpan={2} className={HEADER_CELL_CLASS} style={{ width: '16%' }}>점검내용</td>
+                    {DAYS.map(day => (
+                      <td key={day} className={HEADER_CELL_CLASS} style={{ width: `${76 / 7}%` }}>{day}</td>
+                    ))}
+                  </tr>
+
+                  {(() => {
+                    let viewItemIndex = 0
+                    return routineChecklistItemsMockData.map((section) => (
+                      section.items.map((item, idx) => {
+                        const currentItemIndex = viewItemIndex++
+                        const itemId = `item-${currentItemIndex}`
+                        return (
+                          <tr key={itemId}>
+                            {idx === 0 && (
+                              <td rowSpan={section.items.length} className={`${HEADER_CELL_CLASS} align-middle`} style={{ width: '8%' }}>
+                                {section.category.length === 4 ? (
+                                  <>{section.category.slice(0, 2)}<br/>{section.category.slice(2)}</>
+                                ) : section.category}
+                              </td>
+                            )}
+                            <td colSpan={2} className={`${CELL_CLASS} ${TEXT_SIZE_XS} text-left whitespace-nowrap`}>{item}</td>
+                            {DAYS.map(day => (
+                              <td key={day} className={`${CELL_CLASS} text-center`}>
+                                <div className="flex items-center justify-center">
+                                  <Circle size={14} className="text-[var(--primary)]" strokeWidth={2.5} />
+                                </div>
+                              </td>
+                            ))}
+                          </tr>
+                        )
+                      })
+                    ))
+                  })()}
+
+                  <tr className="notes-row">
+                    <td colSpan={2} className={`${HEADER_CELL_CLASS} text-center align-middle`}>
+                      특이사항 및 위험요인<br/>(일자, 장소 표시 후 기록)
+                    </td>
+                    <td colSpan={8} className={`${CELL_CLASS} align-top`}>
+                      <span className={`${TEXT_SIZE_XS} whitespace-pre-wrap`}>-</span>
+                    </td>
+                  </tr>
+
+                  <tr className="notes-row">
+                    <td colSpan={2} className={`${HEADER_CELL_CLASS} text-center align-middle`}>
+                      관리책임자<br/>안전점검 지시사항
+                    </td>
+                    <td colSpan={8} className={`${CELL_CLASS} align-top`}>
+                      <span className={`${TEXT_SIZE_XS} whitespace-pre-wrap`}>-</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <style>{`
+              @media print {
+                @page { size: A4 landscape; margin: 5mm; }
+                body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .print-content-list {
+                  padding: 0 !important;
+                  transform: scale(0.78);
+                  transform-origin: top left;
+                  width: 128%;
+                }
+                .print-content-list table { font-size: 9px !important; table-layout: fixed; }
+                .print-content-list td, .print-content-list th { padding: 2px 3px !important; white-space: nowrap !important; }
+                .print-content-list h1 { font-size: 16px !important; }
+                .print-content-list .mb-4 { margin-bottom: 6px !important; }
+                .print-content-list .h-14 { height: 30px !important; }
+                .print-content-list .h-10 { height: 22px !important; }
+                .print-content-list .notes-row td { white-space: normal !important; }
+                .print-content-list .notes-row th { white-space: normal !important; }
               }
             `}</style>
           </div>
