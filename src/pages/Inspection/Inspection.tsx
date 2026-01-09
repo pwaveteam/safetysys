@@ -7,16 +7,16 @@ import TabMenu from "@/components/common/base/TabMenu"
 import PageTitle from "@/components/common/base/PageTitle"
 import Pagination from "@/components/common/base/Pagination"
 import InspectionLog from "@/pages/Inspection/InspectionLog"
-import InspectionRoutineRegister from "@/pages/Inspection/InspectionRoutineRegister"
 import InspectionPlanRegister from "@/pages/Inspection/InspectionPlanRegister"
+import InspectionRoutine from "@/pages/Inspection/InspectionRoutine"
 import usePagination from "@/hooks/usePagination"
 import useHandlers from "@/hooks/useHandlers"
 import useFilterBar from "@/hooks/useFilterBar"
-import { CirclePlus, ClipboardList, Trash2 } from "lucide-react"
+import { CirclePlus, CalendarCheck, List, Trash2 } from "lucide-react"
 import InfoBox from "@/components/common/base/InfoBox"
 import { inspectionResultsMockData, inspectionPlanMockData } from "@/data/mockData"
 
-const TAB_LABELS = ["점검목록", "점검표(체크리스트)관리", "안전순회 점검일지"]
+const TAB_LABELS = ["점검목록", "점검표(체크리스트)관리"]
 
 type InspectionRow = DataRow & {
   id: number | string
@@ -86,7 +86,7 @@ export default function Inspection() {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
   const tabParam = searchParams.get("tab")
-  const currentIndex = tabParam === TAB_LABELS[2] ? 2 : tabParam === TAB_LABELS[1] ? 1 : 0
+  const currentIndex = tabParam === TAB_LABELS[1] ? 1 : 0
 
   const handleTabClick = (idx: number) => {
     const tabName = TAB_LABELS[idx]
@@ -94,8 +94,6 @@ export default function Inspection() {
       navigate(`/inspection?tab=${encodeURIComponent(tabName)}`)
     } else if (idx === 1) {
       navigate(`/inspection/checklist?tab=${encodeURIComponent(tabName)}`)
-    } else {
-      navigate(`/inspection/routine?tab=${encodeURIComponent(tabName)}`)
     }
   }
 
@@ -105,7 +103,7 @@ export default function Inspection() {
     }
   }, [])
 
-  const [todayPatrolCompleted] = useState(false)
+  const [isRoutineRegisterOpen, setIsRoutineRegisterOpen] = useState(false)
 
   const allInspectionData = useMemo(() => {
     const planData = inspectionPlanMockData.map(convertPlanToInspection)
@@ -119,9 +117,8 @@ export default function Inspection() {
   const [isResultViewOpen, setIsResultViewOpen] = useState(false)
   const [selectedResult, setSelectedResult] = useState<InspectionRow | null>(null)
   const [resultViewMode, setResultViewMode] = useState<"view" | "edit">("view")
-  const [isPatrolDialogOpen, setIsPatrolDialogOpen] = useState(false)
-  const [patrolDialogMode, setPatrolDialogMode] = useState<"view" | "edit">("view")
   const [isPlanRegisterOpen, setIsPlanRegisterOpen] = useState(false)
+  const [isRoutineListOpen, setIsRoutineListOpen] = useState(false)
 
   const { searchText, setSearchText, inspectionField, setInspectionField, inspectionKind, setInspectionKind, filteredData, handleSearch } = useFilterBar({
     data,
@@ -180,7 +177,7 @@ export default function Inspection() {
       <TabMenu tabs={TAB_LABELS} activeIndex={currentIndex} onTabClick={handleTabClick} className="mb-6" />
 
       <div className="mb-6">
-        <InfoBox message="장소, 분야, 점검종류별로 점검일정을 등록하고 관리합니다." />
+        <InfoBox message="사업장 환경에 맞게 장소, 분야, 점검종류별로 점검을 등록하고 확인하세요" />
       </div>
 
       <div className="mb-3">
@@ -193,6 +190,24 @@ export default function Inspection() {
           searchText={searchText}
           onSearchText={setSearchText}
           onSearch={handleSearch}
+          rightContent={
+            <div className="flex items-center gap-1">
+              <Button
+                variant="accent"
+                onClick={() => setIsRoutineRegisterOpen(true)}
+                className="flex items-center gap-1"
+              >
+                <CalendarCheck size={16} />안전순회 점검일지 작성
+              </Button>
+              <Button
+                variant="accentOutline"
+                onClick={() => setIsRoutineListOpen(true)}
+                className="flex items-center gap-1"
+              >
+                <List size={16} />안전순회 점검일지
+              </Button>
+            </div>
+          }
         />
       </div>
 
@@ -202,29 +217,6 @@ export default function Inspection() {
           <Button variant="action" onClick={() => setIsPlanRegisterOpen(true)} className="flex items-center gap-1">
             <CirclePlus size={16} />신규등록
           </Button>
-          {todayPatrolCompleted ? (
-            <Button
-              variant="action"
-              onClick={() => {
-                setPatrolDialogMode("view")
-                setIsPatrolDialogOpen(true)
-              }}
-              className="flex items-center gap-1"
-            >
-              <ClipboardList size={16} />안전순회 점검일지
-            </Button>
-          ) : (
-            <Button
-              variant="action"
-              onClick={() => {
-                setPatrolDialogMode("edit")
-                setIsPatrolDialogOpen(true)
-              }}
-              className="flex items-center gap-1"
-            >
-              <ClipboardList size={16} />안전순회 점검일지
-            </Button>
-          )}
           <Button variant="action" onClick={handleDelete} className="flex items-center gap-1">
             <Trash2 size={16} />삭제
           </Button>
@@ -234,29 +226,6 @@ export default function Inspection() {
             <Button variant="action" onClick={() => setIsPlanRegisterOpen(true)} className="flex items-center gap-1">
               <CirclePlus size={16} />신규등록
             </Button>
-            {todayPatrolCompleted ? (
-              <Button
-                variant="action"
-                onClick={() => {
-                  setPatrolDialogMode("view")
-                  setIsPatrolDialogOpen(true)
-                }}
-                className="flex items-center gap-1"
-              >
-                <ClipboardList size={16} />안전순회 점검일지
-              </Button>
-            ) : (
-              <Button
-                variant="action"
-                onClick={() => {
-                  setPatrolDialogMode("edit")
-                  setIsPatrolDialogOpen(true)
-                }}
-                className="flex items-center gap-1"
-              >
-                <ClipboardList size={16} />안전순회 점검일지
-              </Button>
-            )}
             <Button variant="action" onClick={handleDelete} className="flex items-center gap-1">
               <Trash2 size={16} />삭제
             </Button>
@@ -295,15 +264,17 @@ export default function Inspection() {
         mode={resultViewMode}
       />
 
-      <InspectionRoutineRegister
-        open={isPatrolDialogOpen}
-        onClose={() => setIsPatrolDialogOpen(false)}
-        mode={patrolDialogMode}
-      />
-
       <InspectionPlanRegister
         open={isPlanRegisterOpen}
         onClose={() => setIsPlanRegisterOpen(false)}
+      />
+
+      <InspectionRoutine
+        listOpen={isRoutineListOpen}
+        onListClose={() => setIsRoutineListOpen(false)}
+        registerOpen={isRoutineRegisterOpen}
+        onRegisterClose={() => setIsRoutineRegisterOpen(false)}
+        mode="edit"
       />
     </section>
   )

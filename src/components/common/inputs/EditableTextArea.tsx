@@ -44,7 +44,7 @@ className={`
 w-full px-2 py-1.5 rounded-md border border-[var(--border)]
 text-xs sm:text-sm transition-all
 bg-white text-[#333A3F] placeholder:text-gray-400
-focus:outline-none focus:border-[var(--secondary)] focus:ring-1 focus:ring-[var(--secondary)]
+focus:outline-none focus:border-[var(--primary)]
 resize-none leading-relaxed block
 ${disabled ? "bg-gray-50 cursor-not-allowed text-gray-500" : ""}
 ${className}

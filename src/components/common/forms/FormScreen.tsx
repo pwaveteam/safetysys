@@ -83,8 +83,6 @@ isModal = false,
 notifyEnabled = true,
 repeatEnabled = false,
 }: FormScreenProps) {
-const BORDER_STYLE = { borderWidth: "1px", borderStyle: "solid" as const, borderColor: "var(--border)" }
-
 const FONT_SM_BASE = "text-xs md:text-base"
 
 const headerFont = { fontWeight: 600, color: "var(--tertiary)" }
@@ -99,15 +97,17 @@ const TEXT_SECONDARY = "text-gray-600"
 const TEXT_DISABLED = "text-gray-500"
 
 const BORDER_CLASS = "rounded-lg"
+const BORDER_INPUT_CLASS = "border border-[var(--border)]"
+const FOCUS_CLASS = "focus:outline-none focus:border-[var(--primary)]"
 const PLACEHOLDER_CLASS = "placeholder:font-normal placeholder:text-gray-500 placeholder:text-xs md:placeholder:text-base"
 const TEXT_BASE_CLASS = "text-xs md:text-base font-medium"
-const INPUT_BASE_CLASS = `${BORDER_CLASS} px-2 py-2 w-full appearance-none ${PLACEHOLDER_CLASS} ${TEXT_BASE_CLASS}`
+const INPUT_BASE_CLASS = `${BORDER_CLASS} ${BORDER_INPUT_CLASS} ${FOCUS_CLASS} px-2 py-2 w-full appearance-none ${PLACEHOLDER_CLASS} ${TEXT_BASE_CLASS}`
 
 const INPUT_EDITABLE = `${INPUT_BASE_CLASS} ${BG_WHITE} ${TEXT_PRIMARY}`
 const INPUT_READONLY = `${INPUT_BASE_CLASS} ${BG_READONLY} ${TEXT_DISABLED}`
 const INPUT_PASSWORD = `${INPUT_BASE_CLASS} ${BG_PASSWORD} ${TEXT_PRIMARY}`
 
-const TEXTAREA_CLASS = `${BORDER_CLASS} ${PLACEHOLDER_CLASS} ${TEXT_BASE_CLASS} p-2 w-full min-h-[150px] ${BG_WHITE} ${TEXT_PRIMARY}`
+const TEXTAREA_CLASS = `${BORDER_CLASS} ${BORDER_INPUT_CLASS} ${FOCUS_CLASS} ${PLACEHOLDER_CLASS} ${TEXT_BASE_CLASS} p-2 w-full min-h-[150px] ${BG_WHITE} ${TEXT_PRIMARY}`
 const FILE_WRAPPER_CLASS = `w-full h-10 ${BORDER_CLASS} flex items-center justify-center ${TEXT_BASE_CLASS}`
 const FILE_BTN_CLASS = `h-8 flex items-center px-3 bg-gray-100 rounded ${FONT_SM_BASE} ${TEXT_PRIMARY} cursor-pointer`
 const FILE_TEXT_CLASS = `${FONT_SM_BASE} ${TEXT_SECONDARY} flex-1 truncate`
@@ -204,9 +204,7 @@ const isRequired = !["fileUpload", "photoUpload", "tags"].includes(field.type ||
 
 const requiredAttrs = isRequired ? { required: true } : {}
 
-const errorBorderStyle = field.hasError
-  ? { borderWidth: "1px", borderStyle: "solid" as const, borderColor: "#dc2626" }
-  : BORDER_STYLE
+const errorBorderClass = field.hasError ? "!border-red-600" : ""
 
 if (field.type === "custom" && field.customRender) return field.customRender
 
@@ -214,8 +212,7 @@ if (field.type === "signature") {
 return (
 <div className="py-0">
 <div
-className={`${BG_WHITE} p-4 ${BORDER_CLASS} w-64 h-32 relative`}
-style={BORDER_STYLE}
+className={`${BG_WHITE} p-4 ${BORDER_CLASS} ${BORDER_INPUT_CLASS} w-64 h-32 relative`}
 >
 {field.signatureEditable && (
 <span
@@ -260,8 +257,7 @@ return (
 name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} ${(field.disabled || (field.name === "notifyWhen" && !notifyEnabled)) ? "cursor-not-allowed text-gray-400" : ""}`}
-style={errorBorderStyle}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} ${errorBorderClass} ${(field.disabled || (field.name === "notifyWhen" && !notifyEnabled)) ? "cursor-not-allowed text-gray-400" : ""}`}
 {...requiredAttrs}
 disabled={field.disabled || (field.name === "notifyWhen" && !notifyEnabled)}
 >
@@ -285,8 +281,7 @@ name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
 placeholder={field.placeholder || "Search"}
-className={`${INPUT_EDITABLE} pr-8`}
-style={errorBorderStyle}
+className={`${INPUT_EDITABLE} pr-8 ${errorBorderClass}`}
 {...requiredAttrs}
 />
 <Search className={`absolute right-2 top-1/2 -translate-y-1/2 ${TEXT_DISABLED} w-5 h-5 pointer-events-none`} />
@@ -300,20 +295,18 @@ type="date"
 name={name}
 value={value}
 onChange={onChange}
-className={`${disabled ? INPUT_READONLY : INPUT_EDITABLE} w-full`}
-style={hasError ? { borderWidth: "1px", borderStyle: "solid" as const, borderColor: "#dc2626" } : BORDER_STYLE}
+className={`${disabled ? INPUT_READONLY : INPUT_EDITABLE} w-full ${hasError ? "!border-red-600" : ""}`}
 disabled={disabled}
 {...(required ? { required: true } : {})}
 />
 )
 
-const renderTimeSelect = (name: string, value: string, type: "hour" | "minute", required = false) => (
+const renderTimeSelect = (name: string, value: string, type: "hour" | "minute", required = false, hasError = false) => (
 <select
 name={name}
 value={value}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0`}
-style={BORDER_STYLE}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0 ${hasError ? "!border-red-600" : ""}`}
 {...(required ? { required: true } : {})}
 >
 <option value="">{type === "hour" ? "시" : "분"}</option>
@@ -355,7 +348,7 @@ return (
 }
 
 if (field.type === "timeRange") {
-const timeErrorStyle = field.hasError ? { borderWidth: "1px", borderStyle: "solid" as const, borderColor: "#dc2626" } : BORDER_STYLE
+const timeErrorClass = field.hasError ? "!border-red-600" : ""
 return (
 <div className="flex flex-col gap-2 w-full">
 <div className="flex items-center gap-1 w-full">
@@ -363,8 +356,7 @@ return (
 name="startHour"
 value={values.startHour || ""}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0`}
-style={timeErrorStyle}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0 ${timeErrorClass}`}
 >
 <option value="">시</option>
 {[...Array(19).keys()].map(h => {
@@ -380,8 +372,7 @@ return (
 name="startMinute"
 value={values.startMinute || ""}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0`}
-style={timeErrorStyle}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0 ${timeErrorClass}`}
 >
 <option value="">분</option>
 {["00", "15", "30", "45"].map(m => (
@@ -399,8 +390,7 @@ style={timeErrorStyle}
 name="endHour"
 value={values.endHour || ""}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0`}
-style={timeErrorStyle}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0 ${timeErrorClass}`}
 >
 <option value="">시</option>
 {[...Array(19).keys()].map(h => {
@@ -416,8 +406,7 @@ return (
 name="endMinute"
 value={values.endMinute || ""}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0`}
-style={timeErrorStyle}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} flex-1 min-w-0 ${timeErrorClass}`}
 >
 <option value="">분</option>
 {["00", "15", "30", "45"].map(m => (
@@ -496,8 +485,7 @@ onChange={handlePhoneChange}
 placeholder="010-0000-0000"
 maxLength={13}
 inputMode="numeric"
-className={`${inputClass} w-full md:max-w-[250px]`}
-style={errorBorderStyle}
+className={`${inputClass} w-full md:max-w-[250px] ${errorBorderClass}`}
 {...requiredAttrs}
 />
 {field.buttonRender}
@@ -515,7 +503,6 @@ value={values.emailId || ""}
 onChange={handleEmailIdChange}
 placeholder="이메일"
 className={`${inputClass} w-full md:max-w-[250px]`}
-style={BORDER_STYLE}
 />
 <span className={`${FONT_SM_BASE} ${TEXT_PRIMARY} shrink-0 hidden md:inline`}>@</span>
 {isCustomEmail ? (
@@ -528,7 +515,6 @@ value={values.emailDomain || ""}
 onChange={onChange}
 placeholder="도메인 입력"
 className={`${inputClass} flex-1`}
-style={BORDER_STYLE}
 />
 <button
 type="button"
@@ -546,7 +532,6 @@ name="emailDomainSelect"
 value={values.emailDomainSelect || ""}
 onChange={e => handleEmailDomainChange(e.target.value)}
 className={`${INPUT_EDITABLE} ${SELECT_PADDING} w-full md:max-w-[250px]`}
-style={BORDER_STYLE}
 >
 <option value="">선택</option>
 <option value="gmail.com">gmail.com</option>
@@ -568,8 +553,7 @@ name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
 placeholder={field.placeholder ?? `${field.label} 입력`}
-className={TEXTAREA_CLASS}
-style={errorBorderStyle}
+className={`${TEXTAREA_CLASS} ${errorBorderClass}`}
 />
 )
 }
@@ -588,8 +572,8 @@ if (field.type === "fileUpload") {
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <label className={`${FILE_WRAPPER_CLASS} relative p-1 gap-2`} style={errorBorderStyle}>
-        <span className={FILE_BTN_CLASS} style={BORDER_STYLE}>
+      <label className={`${FILE_WRAPPER_CLASS} ${BORDER_INPUT_CLASS} relative p-1 gap-2 ${field.hasError ? "!border-red-600" : ""}`}>
+        <span className={`${FILE_BTN_CLASS} ${BORDER_INPUT_CLASS}`}>
           파일 선택
         </span>
         <span className={FILE_TEXT_CLASS}>
@@ -630,7 +614,7 @@ if (field.type === "fileUpload") {
         />
       </label>
       {values[field.name] && values[field.name].trim() && (
-        <ul className={FILE_LIST_CLASS} style={BORDER_STYLE}>
+        <ul className={`${FILE_LIST_CLASS} ${BORDER_INPUT_CLASS}`}>
           {values[field.name].split(",").map(f => f.trim()).filter(Boolean).map((fname: string, idx: number) => (
             <li key={idx} className="flex items-center justify-between gap-2 py-1">
               <span className="truncate flex-1">• {fname}</span>
@@ -672,99 +656,6 @@ if (field.type === "fileUpload") {
   )
 }
 
-// if (field.type === "photoUpload") {
-//   const handlePreview = (fileName: string) => {
-//     window.open(`/api/files/preview/${encodeURIComponent(fileName)}`, '_blank')
-//   }
-
-//   const handleDownload = (fileName: string) => {
-//     const link = document.createElement('a')
-//     link.href = `/api/files/download/${encodeURIComponent(fileName)}`
-//     link.download = fileName
-//     link.click()
-//   }
-
-//   return (
-//     <div className="flex flex-col gap-2 w-full">
-//       <label className={`${FILE_WRAPPER_CLASS} relative p-1 gap-2`} style={errorBorderStyle}>
-//         <span className={FILE_BTN_CLASS} style={BORDER_STYLE}>
-//           사진 선택
-//         </span>
-//         <span className={FILE_TEXT_CLASS}>
-//           {values[field.name] && values[field.name].trim()
-//             ? `${values[field.name].split(",").map(f => f.trim()).filter(Boolean).length}개 파일 선택됨`
-//             : "선택된 파일 없음"}
-//         </span>
-//         <input
-//           type="file"
-//           name={field.name}
-//           multiple
-//           accept="image/*"
-//           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-//           onChange={e => {
-//             const files = Array.from((e.target as HTMLInputElement).files || [])
-//             const existingFiles = values[field.name] ? values[field.name].split(",").map(f => f.trim()).filter(Boolean) : []
-//             const newFileNames = files.map(f => f.name)
-//             const combinedFiles = [...existingFiles, ...newFileNames]
-//             if (combinedFiles.length > 10) {
-//               alert("최대 10개 파일까지만 업로드할 수 있습니다.")
-//               return
-//             }
-//             const totalSize = files.reduce((sum, file) => sum + file.size, 0)
-//             const maxSize = 100 * 1024 * 1024
-//             if (totalSize > maxSize) {
-//               alert("전체 파일 용량이 100MB를 초과합니다.")
-//               return
-//             }
-//             onChange({ target: { name: field.name, value: combinedFiles.join(",") } } as React.ChangeEvent<HTMLInputElement>)
-//             e.target.value = ""
-//           }}
-//         />
-//       </label>
-//       {values[field.name] && values[field.name].trim() && (
-//         <ul className={FILE_LIST_CLASS} style={BORDER_STYLE}>
-//           {values[field.name].split(",").map(f => f.trim()).filter(Boolean).map((fname: string, idx: number) => (
-//             <li key={idx} className="flex items-center justify-between gap-2 py-1">
-//               <span className="truncate flex-1">• {fname}</span>
-//               <div className="flex items-center gap-3 shrink-0 pr-1">
-//                 <button
-//                   type="button"
-//                   onClick={() => handlePreview(fname)}
-//                   className="text-gray-400 hover:text-gray-600"
-//                   aria-label="미리보기"
-//                 >
-//                   <Eye size={16} />
-//                 </button>
-//                 <button
-//                   type="button"
-//                   onClick={() => handleDownload(fname)}
-//                   className="text-gray-400 hover:text-gray-600"
-//                   aria-label="다운로드"
-//                 >
-//                   <Download size={16} />
-//                 </button>
-//                 <button
-//                   type="button"
-//                   onClick={() => {
-//                     const files = values[field.name].split(",").map(f => f.trim()).filter(Boolean)
-//                     files.splice(idx, 1)
-//                     onChange({ target: { name: field.name, value: files.join(",") } } as React.ChangeEvent<HTMLInputElement>)
-//                   }}
-//                   className="text-gray-400 hover:text-gray-600"
-//                   aria-label="삭제"
-//                 >
-//                   <X size={16} />
-//                 </button>
-//               </div>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   )
-// }
-
-
 
 if (field.type === "photoUpload") {
   const handleDownload = (fileName: string, url: string) => {
@@ -776,8 +667,8 @@ if (field.type === "photoUpload") {
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <label className={`${FILE_WRAPPER_CLASS} relative p-1 gap-2`} style={errorBorderStyle}>
-        <span className={FILE_BTN_CLASS} style={BORDER_STYLE}>
+      <label className={`${FILE_WRAPPER_CLASS} ${BORDER_INPUT_CLASS} relative p-1 gap-2 ${field.hasError ? "!border-red-600" : ""}`}>
+        <span className={`${FILE_BTN_CLASS} ${BORDER_INPUT_CLASS}`}>
           사진 선택
         </span>
         <span className={FILE_TEXT_CLASS}>
@@ -816,7 +707,7 @@ if (field.type === "photoUpload") {
       </label>
       {photoPreviewUrls.length > 0 && (
         <div className="flex flex-col gap-2">
-          <ul className={FILE_LIST_CLASS} style={BORDER_STYLE}>
+          <ul className={`${FILE_LIST_CLASS} ${BORDER_INPUT_CLASS}`}>
             {photoPreviewUrls.map((preview, idx) => (
               <li key={idx} className="flex items-center justify-between gap-2 py-1">
                 <span className="truncate flex-1">• {preview.name}</span>
@@ -846,7 +737,7 @@ if (field.type === "photoUpload") {
               </li>
             ))}
           </ul>
-          <div className="grid grid-cols-2 gap-2 p-2 rounded-lg" style={BORDER_STYLE}>
+          <div className={`grid grid-cols-2 gap-2 p-2 rounded-lg ${BORDER_INPUT_CLASS}`}>
             {photoPreviewUrls.map((preview, idx) => (
               <div key={idx} className="relative">
                 <button
@@ -890,8 +781,7 @@ name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
 placeholder={field.placeholder || ""}
-className={`${INPUT_EDITABLE} w-full`}
-style={errorBorderStyle}
+className={`${INPUT_EDITABLE} w-full ${errorBorderClass}`}
 min={0}
 />
 </div>
@@ -899,9 +789,7 @@ min={0}
 }
 
 if (field.type === "quantityUnit") {
-const unitErrorStyle = field.hasUnitError
-  ? { borderWidth: "1px", borderStyle: "solid" as const, borderColor: "#dc2626" }
-  : BORDER_STYLE
+const unitErrorClass = field.hasUnitError ? "!border-red-600" : ""
 const isDirectInput = values[field.name + "_unit"] === "직접입력"
 return (
 <div className="flex flex-col md:flex-row md:items-center gap-2 w-full md:max-w-xs">
@@ -910,8 +798,7 @@ type="number"
 name={field.name + "_value"}
 value={values[field.name + "_value"] || ""}
 placeholder={field.placeholder || "값"}
-className={`${INPUT_EDITABLE} w-full md:flex-1`}
-style={errorBorderStyle}
+className={`${INPUT_EDITABLE} w-full md:flex-1 ${errorBorderClass}`}
 onChange={onChange}
 />
 {isDirectInput ? (
@@ -920,8 +807,7 @@ type="text"
 name={field.name + "_unit_custom"}
 value={values[field.name + "_unit_custom"] || ""}
 placeholder="단위 입력"
-className={`${INPUT_EDITABLE} w-full md:flex-1`}
-style={unitErrorStyle}
+className={`${INPUT_EDITABLE} w-full md:flex-1 ${unitErrorClass}`}
 onChange={onChange}
 />
 ) : (
@@ -929,8 +815,7 @@ onChange={onChange}
 name={field.name + "_unit"}
 value={values[field.name + "_unit"] || ""}
 onChange={onChange}
-className={`${INPUT_EDITABLE} ${SELECT_PADDING} w-full md:flex-1`}
-style={unitErrorStyle}
+className={`${INPUT_EDITABLE} ${SELECT_PADDING} w-full md:flex-1 ${unitErrorClass}`}
 >
 <option value="">단위</option>
 {field.options?.map(o => (
@@ -954,7 +839,6 @@ name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
 className={`${INPUT_EDITABLE} ${SELECT_PADDING} w-[70px] md:w-[80px]`}
-style={BORDER_STYLE}
 >
 <option value="">선택</option>
 {INSPECTION_CYCLE_OPTIONS.map(opt => (
@@ -974,7 +858,7 @@ onChange={() => onRepeatChange?.(!repeatEnabled)}
 if (field.type === "tags") {
 const tags = (values[field.name] || "").split(",").filter(Boolean)
 return (
-<section className={TAG_CONTAINER_CLASS} style={BORDER_STYLE}>
+<section className={`${TAG_CONTAINER_CLASS} ${BORDER_INPUT_CLASS}`}>
 <div className="relative flex flex-wrap items-center gap-1 w-full">
 {tags.length === 0 ? (
 <span className={TAG_PLACEHOLDER_CLASS}>
@@ -984,8 +868,7 @@ return (
 tags.map(t => (
 <span
 key={t}
-className={TAG_ITEM_CLASS}
-style={{ backgroundColor: "var(--neutral-bg)", ...BORDER_STYLE }}
+className={`${TAG_ITEM_CLASS} ${BORDER_INPUT_CLASS} bg-[var(--neutral-bg)]`}
 >
 {t}
 <button
@@ -1011,7 +894,6 @@ name={field.name}
 value={values[field.name] || ""}
 disabled
 className={INPUT_READONLY}
-style={BORDER_STYLE}
 />
 )
 }
@@ -1026,8 +908,7 @@ value={values[field.name] || ""}
 onChange={onChange}
 placeholder={field.placeholder}
 disabled={field.disabled}
-className={`${field.disabled ? INPUT_READONLY : inputClass} w-full md:max-w-[250px]`}
-style={errorBorderStyle}
+className={`${field.disabled ? INPUT_READONLY : inputClass} w-full md:max-w-[250px] ${errorBorderClass}`}
 {...requiredAttrs}
 />
 {field.buttonRender}
@@ -1044,8 +925,7 @@ name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
 placeholder={field.placeholder}
-className={`${inputClass} w-full md:max-w-[250px]`}
-style={errorBorderStyle}
+className={`${inputClass} w-full md:max-w-[250px] ${errorBorderClass}`}
 {...requiredAttrs}
 />
 {field.buttonRender}
@@ -1060,8 +940,7 @@ name={field.name}
 value={values[field.name] || ""}
 onChange={onChange}
 placeholder={field.placeholder}
-className={inputClass}
-style={errorBorderStyle}
+className={`${inputClass} ${errorBorderClass}`}
 />
 )
 }

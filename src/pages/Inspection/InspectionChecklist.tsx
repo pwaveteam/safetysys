@@ -9,7 +9,7 @@ import { checklistTemplateMockData } from "@/data/mockData"
 import Sortable from "sortablejs"
 import useForm, { ValidationRules } from "@/hooks/useForm"
 
-const TAB_LABELS = ["점검목록", "점검표(체크리스트)관리", "안전순회 점검일지"]
+const TAB_LABELS = ["점검목록", "점검표(체크리스트)관리"]
 
 interface ChecklistRow {
   id: number | string
@@ -27,7 +27,7 @@ type EditingChecklist = {
 const BORDER_CLASS = "border-[var(--border)]"
 const TEXT_PRIMARY = "text-gray-800"
 const TEXT_SECONDARY = "text-gray-500"
-const INPUT_CLASS = "border rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 text-sm text-gray-800 placeholder:text-gray-500"
+const INPUT_CLASS = "border rounded-lg px-3 bg-white focus:outline-none focus:border-[var(--primary)] text-sm text-gray-800 placeholder:text-gray-500"
 const BTN_CLASS = "inline-flex items-center justify-center rounded-md hover:bg-gray-50"
 
 const initialData: ChecklistRow[] = checklistTemplateMockData.slice(0, 5).map(row => ({
@@ -49,8 +49,6 @@ export default function InspectionChecklist() {
       navigate(`/inspection?tab=${encodeURIComponent(tabName)}`)
     } else if (idx === 1) {
       navigate(`/inspection/checklist?tab=${encodeURIComponent(tabName)}`)
-    } else {
-      navigate(`/inspection/routine?tab=${encodeURIComponent(tabName)}`)
     }
   }
 
@@ -198,7 +196,7 @@ export default function InspectionChecklist() {
       <TabMenu tabs={TAB_LABELS} activeIndex={currentIndex} onTabClick={handleTabClick} className="mb-6" />
 
       <div className="mb-6">
-        <InfoBox message="좌측에서 점검표 목록을 확인하고, 우측에서 점검항목을 편집하거나 새로운 점검표를 등록할 수 있습니다." />
+        <InfoBox message="점검표 항목을 직접 구성하거나 템플릿으로 손쉽게 시작해보세요" />
       </div>
 
       <div className="flex gap-4" style={{ minHeight: "560px" }}>

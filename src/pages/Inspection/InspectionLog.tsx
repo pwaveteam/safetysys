@@ -263,7 +263,9 @@ export default function InspectionLog({ open, onClose, data, mode = "view", onSu
                           <tr key={item.id} className={idx % 2 === 1 ? "bg-gray-50/30" : ""}>
                             {idx === 0 && category && (
                               <td rowSpan={categoryItems.length} className={`${isLastCategory ? "" : "border-b"} border-r ${BORDER_CLASS} px-2 py-2 ${TEXT_SIZE_XS} font-medium ${TEXT_PRIMARY} text-center align-middle bg-gray-50`}>
-                                {category}
+                                {category.length === 4 ? (
+                                  <>{category.slice(0, 2)}<br/>{category.slice(2)}</>
+                                ) : category}
                               </td>
                             )}
                             <td className={`${isLastRow ? "" : "border-b"} border-l ${BORDER_CLASS} px-2 py-2 ${TEXT_SIZE_XS} ${TEXT_PRIMARY}`}>{item.content}</td>
@@ -298,7 +300,7 @@ export default function InspectionLog({ open, onClose, data, mode = "view", onSu
                                   value={item.note}
                                   onChange={(e) => handleNoteChange(item.id, e.target.value)}
                                   placeholder="비고 입력"
-                                  className={`w-full px-1 py-1 ${TEXT_SIZE_XS} border ${BORDER_CLASS} rounded outline-none focus:ring-1 focus:ring-[var(--primary)] placeholder:text-gray-300`}
+                                  className={`w-full px-1 py-1 ${TEXT_SIZE_XS} border ${BORDER_CLASS} rounded outline-none focus:border-[var(--primary)] placeholder:text-gray-300`}
                                 />
                               ) : (
                                 <span className="truncate block">{item.note || "-"}</span>
@@ -347,17 +349,17 @@ export default function InspectionLog({ open, onClose, data, mode = "view", onSu
               </table>
             </div>
 
-            <div className={`border ${BORDER_CLASS} rounded-lg overflow-hidden`}>
+            <div className={`border ${BORDER_CLASS} rounded-lg overflow-hidden notes-section`}>
               <table className="w-full border-collapse">
                 <tbody>
                   <tr>
-                    <th className={`bg-gray-50 ${BORDER_CLASS} border-b border-r px-2 py-2 ${TEXT_SIZE_XS} font-medium ${TEXT_SECONDARY} text-center align-middle`} style={{ width: '18%' }}>특이사항 및 위험요인<br/>(일자, 장소 표시 후 기록)</th>
+                    <th className={`bg-gray-50 ${BORDER_CLASS} border-b border-r px-2 py-2 ${TEXT_SIZE_XS} font-medium ${TEXT_SECONDARY} text-center align-middle`} style={{ width: '22%' }}>특이사항 및 위험요인<br/>(일자, 장소 표시 후 기록)</th>
                     <td className={`${BORDER_CLASS} border-b px-2 py-2 ${TEXT_SIZE_XS} ${TEXT_PRIMARY} align-top`}>
                       {isEditMode ? (
                         <textarea
                           value={specialNotes}
                           onChange={(e) => setSpecialNotes(e.target.value)}
-                          className={`w-full h-14 px-2 py-1 ${TEXT_SIZE_XS} border ${BORDER_CLASS} rounded outline-none resize-none focus:ring-1 focus:ring-[var(--primary)]`}
+                          className={`w-full h-14 px-2 py-1 ${TEXT_SIZE_XS} border ${BORDER_CLASS} rounded outline-none resize-none focus:border-[var(--primary)]`}
                         />
                       ) : (
                         <p className="whitespace-pre-wrap">{data.notes || "-"}</p>
@@ -365,13 +367,13 @@ export default function InspectionLog({ open, onClose, data, mode = "view", onSu
                     </td>
                   </tr>
                   <tr>
-                    <th className={`bg-gray-50 ${BORDER_CLASS} border-r px-2 py-2 ${TEXT_SIZE_XS} font-medium ${TEXT_SECONDARY} text-center align-middle`} style={{ width: '18%' }}>관리책임자<br/>안전점검 지시사항</th>
+                    <th className={`bg-gray-50 ${BORDER_CLASS} border-r px-2 py-2 ${TEXT_SIZE_XS} font-medium ${TEXT_SECONDARY} text-center align-middle`} style={{ width: '22%' }}>관리책임자<br/>안전점검 지시사항</th>
                     <td className={`${BORDER_CLASS} px-2 py-2 ${TEXT_SIZE_XS} ${TEXT_PRIMARY} align-top`}>
                       {isEditMode ? (
                         <textarea
                           value={managerInstructions}
                           onChange={(e) => setManagerInstructions(e.target.value)}
-                          className={`w-full h-14 px-2 py-1 ${TEXT_SIZE_XS} border ${BORDER_CLASS} rounded outline-none resize-none focus:ring-1 focus:ring-[var(--primary)]`}
+                          className={`w-full h-14 px-2 py-1 ${TEXT_SIZE_XS} border ${BORDER_CLASS} rounded outline-none resize-none focus:border-[var(--primary)]`}
                         />
                       ) : (
                         <p className="whitespace-pre-wrap">-</p>
@@ -405,6 +407,12 @@ export default function InspectionLog({ open, onClose, data, mode = "view", onSu
         @media print {
           @page { size: A4; margin: 15mm; }
           body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          table { table-layout: fixed; }
+          thead th, thead td { white-space: nowrap !important; }
+          tbody td { white-space: nowrap !important; }
+          tbody td:nth-child(2) { white-space: normal !important; }
+          .notes-section th { white-space: normal !important; }
+          .notes-section td { white-space: normal !important; }
         }
       `}</style>
 

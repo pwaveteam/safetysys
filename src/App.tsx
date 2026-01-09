@@ -13,7 +13,6 @@ import Dashboard from "./pages/Dashboard/Dashboard"
 
 import Inspection from "./pages/Inspection/Inspection"
 import InspectionChecklist from "./pages/Inspection/InspectionChecklist"
-import InspectionRoutine from "./pages/Inspection/InspectionRoutine"
 
 import TBM from "./pages/TBM/TBM"
 import TBMRegister from "./pages/TBM/TBMRegister"
@@ -106,7 +105,6 @@ return (
 <Route path="/inspection" element={<Inspection />} />
 <Route path="/inspection/results" element={<Inspection />} />
 <Route path="/inspection/checklist" element={<InspectionChecklist />} />
-<Route path="/inspection/routine" element={<InspectionRoutine />} />
 
 <Route path="/tbm" element={<TBM />} />
 <Route path="/tbm/register" element={<TBMRegister />} />

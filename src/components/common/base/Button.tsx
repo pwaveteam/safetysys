@@ -6,6 +6,8 @@ type ButtonVariant=
 "primaryOutline"|
 "secondary"|
 "secondaryOutline"|
+"accent"|
+"accentOutline"|
 "action"|
 "actionPrimary"|
 "support"|
@@ -29,6 +31,8 @@ primary:null,
 primaryOutline:null,
 secondary:null,
 secondaryOutline:null,
+accent:null,
+accentOutline:null,
 action:null,
 actionPrimary:null,
 support:null,
@@ -68,6 +72,12 @@ colors="bg-[var(--secondary)] text-white"
 break
 case "secondaryOutline":
 colors="bg-white text-[var(--secondary)] border border-[var(--secondary)]"
+break
+case "accent":
+colors="bg-sky-600 text-white"
+break
+case "accentOutline":
+colors="bg-white text-sky-600 border border-sky-600"
 break
 case "action":
 colors="bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100"

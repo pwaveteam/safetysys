@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react"
 import Button from "@/components/common/base/Button"
-import { X, Search, Plus } from "lucide-react"
+import { X, Plus, Search } from "lucide-react"
 import { inspectionFieldOptions, inspectionKindOptions } from "@/components/common/base/FilterBar"
 import { inspectionChecklistMockData } from "@/data/mockData"
 import useForm, { ValidationRules } from "@/hooks/useForm"
+import LoadSearchDialog, { SearchItem } from "@/components/dialog/LoadSearchDialog"
 
 interface InspectionPlanRegisterProps {
 open: boolean
@@ -51,9 +52,15 @@ monthlyDates: []
 export default function InspectionPlanRegister({ open, onClose, onSave }: InspectionPlanRegisterProps) {
 const [formData, setFormData] = useState<FormData>(initialFormData)
 const [isTemplateSearchOpen, setIsTemplateSearchOpen] = useState(false)
-const [templateSearchText, setTemplateSearchText] = useState("")
 const [newMonthlyDate, setNewMonthlyDate] = useState("")
 const [monthlyDateError, setMonthlyDateError] = useState("")
+
+const templateItems: SearchItem[] = useMemo(() => {
+return inspectionChecklistMockData.map((item: any) => ({
+id: item.id,
+name: item.template
+}))
+}, [])
 
 const validationRules = useMemo<ValidationRules>(() => ({
 location: { required: true },
@@ -78,20 +85,11 @@ const { validateForm, isFieldInvalid, getFieldError, clearErrors } = useForm(val
 useEffect(() => {
 if (open) {
 setFormData(initialFormData)
-setTemplateSearchText("")
 setNewMonthlyDate("")
 setMonthlyDateError("")
 clearErrors()
 }
 }, [open, clearErrors])
-
-const filteredTemplates = useMemo(() => {
-if (!templateSearchText.trim()) return inspectionChecklistMockData
-const search = templateSearchText.toLowerCase()
-return inspectionChecklistMockData.filter((item: any) =>
-item.template.toLowerCase().includes(search)
-)
-}, [templateSearchText])
 
 const handleChange = (field: keyof FormData, value: any) => {
 setFormData(prev => ({ ...prev, [field]: value }))
@@ -171,14 +169,12 @@ monthlyDates: prev.monthlyDates.filter(d => d !== date)
 }))
 }
 
-const handleSelectTemplate = (template: any) => {
+const handleSelectTemplate = (item: SearchItem) => {
 setFormData(prev => ({
 ...prev,
-templateId: template.id,
-templateName: template.template
+templateId: item.id,
+templateName: item.name
 }))
-setIsTemplateSearchOpen(false)
-setTemplateSearchText("")
 }
 
 const handleSave = () => {
@@ -198,7 +194,7 @@ return (
 <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50">
 <div className="bg-white rounded-none md:rounded-2xl w-full md:w-[600px] md:max-w-[95vw] p-4 md:p-6 shadow-2xl h-screen md:h-auto md:max-h-[90vh] flex flex-col relative">
 <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-200 shrink-0">
-<h2 className="text-base md:text-xl font-bold tracking-tight text-gray-800">점검일정 등록</h2>
+<h2 className="text-lg font-semibold tracking-tight text-gray-800">점검일정 등록</h2>
 <button onClick={onClose} className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]">
 <X size={24} />
 </button>
@@ -427,56 +423,15 @@ className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 ro
 </div>
 </div>
 
-{isTemplateSearchOpen && (
-<div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/50">
-<div className="bg-white rounded-lg w-full max-w-md mx-4 p-4 shadow-2xl max-h-[70vh] flex flex-col">
-<div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
-<h3 className="text-base font-bold text-gray-800">점검표 검색</h3>
-<button
-onClick={() => {
-setIsTemplateSearchOpen(false)
-setTemplateSearchText("")
-}}
-className="p-1 hover:bg-gray-100 rounded"
->
-<X size={20} />
-</button>
-</div>
-
-<div className="mb-3">
-<div className="relative">
-<input
-type="text"
-value={templateSearchText}
-onChange={e => setTemplateSearchText(e.target.value)}
-placeholder="점검표명 검색..."
-className={`${INPUT_CLASS} ${INPUT_NORMAL_CLASS} pr-10`}
-autoFocus
+<LoadSearchDialog
+isOpen={isTemplateSearchOpen}
+title="점검표 검색"
+items={templateItems}
+onSelect={handleSelectTemplate}
+onClose={() => setIsTemplateSearchOpen(false)}
+placeholder="검색"
+emptyMessage="검색 결과가 없습니다."
 />
-<Search size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-</div>
-</div>
-
-<div className="flex-1 overflow-auto border border-[var(--border)] rounded-lg">
-{filteredTemplates.length > 0 ? (
-<ul className="divide-y divide-[var(--border)]">
-{filteredTemplates.map((template: any) => (
-<li
-key={template.id}
-onClick={() => handleSelectTemplate(template)}
-className="px-3 py-2.5 hover:bg-gray-50 cursor-pointer transition"
->
-<div className="text-sm font-medium text-gray-800">{template.template}</div>
-</li>
-))}
-</ul>
-) : (
-<div className="p-8 text-center text-gray-400 text-sm">검색 결과가 없습니다</div>
-)}
-</div>
-</div>
-</div>
-)}
 </>
 )
 }

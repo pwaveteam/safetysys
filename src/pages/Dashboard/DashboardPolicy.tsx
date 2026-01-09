@@ -18,7 +18,7 @@ return(
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 <div className="bg-white rounded-none md:rounded-2xl w-full md:w-[800px] md:max-w-full p-4 md:p-6 shadow-2xl h-screen md:h-auto md:max-h-[85vh] flex flex-col">
 <div className="flex items-center justify-between mb-4 pb-2">
-<h2 className={`text-base md:text-xl font-bold tracking-tight ${TEXT_PRIMARY}`}>안전보건경영방침</h2>
+<h2 className={`text-lg font-semibold tracking-tight ${TEXT_PRIMARY}`}>안전보건경영방침</h2>
 <button onClick={onClose} className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]">
 <X size={24}/>
 </button>
@@ -63,7 +63,7 @@ return(
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 <div className="bg-white rounded-none md:rounded-2xl w-full md:w-[95%] md:max-w-[1200px] p-4 md:p-6 shadow-2xl h-screen md:h-auto md:max-h-[85vh] flex flex-col">
 <div className="flex items-center justify-between mb-3 pb-2">
-<h2 className={`text-base md:text-xl font-bold tracking-tight ${TEXT_PRIMARY}`}>안전보건 목표 및 예산</h2>
+<h2 className={`text-lg font-semibold tracking-tight ${TEXT_PRIMARY}`}>안전보건 목표 및 예산</h2>
 <button onClick={onClose} className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]">
 <X size={24}/>
 </button>

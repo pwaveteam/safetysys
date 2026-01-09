@@ -1,33 +1,64 @@
-import React, { useState, useEffect } from "react"
-import { X } from "lucide-react"
+import React, { useState, useEffect, useMemo, ReactNode } from "react"
+import { X, Search } from "lucide-react"
 import Button from "@/components/common/base/Button"
 import Pagination from "@/components/common/base/Pagination"
+import YearPicker from "@/components/common/inputs/YearPicker"
+import { DIALOG_STYLES, getThClass, getTdClass } from "./DialogCommon"
 
-interface Item {
+export interface ListItem {
 id: string | number
-name: string
+name?: string
+[key: string]: any
 }
 
-interface LoadListDialogProps {
+export interface ColumnDef<T> {
+key: string
+label: string
+width?: string
+align?: "left" | "center" | "right"
+hiddenMobile?: boolean
+render?: (item: T, index: number) => ReactNode
+}
+
+export interface RoutineListItem extends ListItem {
+inspectionDate: string
+inspector: string
+registeredAt: string
+}
+
+export const ROUTINE_LIST_COLUMNS: ColumnDef<RoutineListItem>[] = [
+{ key: "no", label: "No", width: "w-8 md:w-12", align: "center" },
+{ key: "inspectionDate", label: "점검기간", align: "center" },
+{ key: "inspector", label: "점검자", width: "w-20 md:w-24", align: "center" },
+{ key: "registeredAt", label: "등록일", width: "w-24 md:w-28", align: "center", hiddenMobile: true },
+]
+
+export const ROUTINE_LIST_MOCK_DATA: RoutineListItem[] = [
+{ id: 1, inspectionDate: "2026-01-06 ~ 2026-01-12", inspector: "김안전", registeredAt: "2026-01-09" },
+{ id: 2, inspectionDate: "2025-12-30 ~ 2026-01-05", inspector: "이점검", registeredAt: "2026-01-05" },
+{ id: 3, inspectionDate: "2025-12-23 ~ 2025-12-29", inspector: "박순회", registeredAt: "2025-12-29" },
+{ id: 4, inspectionDate: "2025-12-16 ~ 2025-12-22", inspector: "김안전", registeredAt: "2025-12-22" },
+{ id: 5, inspectionDate: "2025-12-09 ~ 2025-12-15", inspector: "이점검", registeredAt: "2025-12-15" },
+]
+
+interface LoadListDialogProps<T extends ListItem = ListItem> {
 isOpen: boolean
-items: Item[]
+items: T[]
 selectedId?: string | number | null
 selectedIds?: (string | number)[]
-onChangeSelected: (selected: (string | number)[] | string | number | null) => void
+onChangeSelected?: (selected: (string | number)[] | string | number | null) => void
 onClose: () => void
 singleSelect?: boolean
+title?: string
+columnLabel?: string
+columns?: ColumnDef<T>[]
+emptyMessage?: string
+searchKeys?: string[]
+actionLabel?: string
+actionDisabled?: boolean | ((item: T) => boolean)
 }
 
-const BORDER_CLASS = "border-[var(--border)]"
-const HEADER_BG_CLASS = "bg-[var(--neutral-bg)]"
-const TEXT_PRIMARY = "text-gray-800"
-const TEXT_SECONDARY = "text-gray-500"
-const TEXT_SIZE_TH = "text-sm"
-const TEXT_SIZE_TD = "text-xs md:text-[13px]"
-const CELL_PADDING = "px-2 md:px-4 py-2"
-const TH_PADDING = "px-2 md:px-4 py-2 md:py-3"
-
-export default function LoadListDialog({
+export default function LoadListDialog<T extends ListItem = ListItem>({
 isOpen,
 items,
 selectedId = null,
@@ -35,30 +66,62 @@ selectedIds = [],
 onChangeSelected,
 onClose,
 singleSelect = false,
-}: LoadListDialogProps) {
+title = "위험성평가표 불러오기",
+columnLabel = "위험성평가명",
+columns,
+emptyMessage = "등록된 위험성평가표가 없습니다.",
+searchKeys = ["name"],
+actionLabel = "선택",
+actionDisabled = false,
+}: LoadListDialogProps<T>) {
 const [currentPage, setCurrentPage] = useState(1)
+const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
+const [searchText, setSearchText] = useState("")
 const itemsPerPage = 10
 
+const defaultColumns: ColumnDef<T>[] = [
+{ key: "no", label: "No", width: "w-8 md:w-12", align: "center" },
+{ key: "name", label: columnLabel, align: "left" },
+{ key: "registeredAt", label: "등록일", width: "w-24 md:w-28", align: "center", hiddenMobile: true },
+]
+
+const finalColumns = columns || defaultColumns
+
 useEffect(() => {
-if (isOpen) setCurrentPage(1)
+if (isOpen) {
+setCurrentPage(1)
+setSearchText("")
+}
 }, [isOpen])
 
-const handleSelect = (id: string | number) => {
+const filteredItems = useMemo(() => {
+return items.filter(item => {
+if (!searchText) return true
+const search = searchText.toLowerCase()
+return searchKeys.some(key => {
+const value = (item as any)[key]
+return value && String(value).toLowerCase().includes(search)
+})
+})
+}, [items, searchText, searchKeys])
+
+const handleSelect = (item: T) => {
+if (!onChangeSelected) return
 if (singleSelect) {
-onChangeSelected(id)
+onChangeSelected(item.id)
 onClose()
 } else {
 const current = selectedIds || []
-const isSelected = current.includes(id)
+const isSelected = current.includes(item.id)
 const newSelected = isSelected
-? current.filter(x => x !== id)
-: [...current, id]
+? current.filter(x => x !== item.id)
+: [...current, item.id]
 onChangeSelected(newSelected)
 }
 }
 
-const totalPages = Math.ceil(items.length / itemsPerPage)
-const paginatedList = items.slice(
+const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
+const paginatedList = filteredItems.slice(
 (currentPage - 1) * itemsPerPage,
 currentPage * itemsPerPage
 )
@@ -67,66 +130,89 @@ const sampleDates = ["2024-05-26", "2024-05-25", "2024-05-24", "2024-05-23", "20
 
 if (!isOpen) return null
 
+const totalColSpan = finalColumns.length + 1
+
 return (
-<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-<div className="bg-white rounded-none md:rounded-2xl w-full md:w-[800px] md:max-w-full p-4 md:p-6 shadow-2xl h-screen md:h-[85vh] flex flex-col relative">
-<div className="flex items-center justify-between mb-2 pb-2">
-<h2 className={`text-base md:text-xl font-bold tracking-tight ${TEXT_PRIMARY}`}>
-위험성평가표 불러오기
-</h2>
-<button
-onClick={onClose}
-className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]"
->
+<div className={DIALOG_STYLES.overlay}>
+<div className={DIALOG_STYLES.containerLg}>
+<div className={DIALOG_STYLES.header}>
+<h2 className={DIALOG_STYLES.title}>{title}</h2>
+<button onClick={onClose} className={DIALOG_STYLES.closeButton}>
 <X size={24} />
 </button>
 </div>
 
-<div className={`flex-1 overflow-auto mb-4 border ${BORDER_CLASS} rounded-lg`}>
-<table className="w-full border-separate border-spacing-0">
-<thead className="sticky top-0 z-10">
-<tr className={HEADER_BG_CLASS}>
-<th className={`border-b ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} w-8 md:w-12 text-center`}>
-No
+<div className={`${DIALOG_STYLES.searchWrapper} mb-3`}>
+<div className={DIALOG_STYLES.searchInputWrapper}>
+<input
+type="text"
+value={searchText}
+onChange={e => setSearchText(e.target.value)}
+placeholder="검색"
+className={`${DIALOG_STYLES.input} pr-10`}
+/>
+<Search size={18} className={DIALOG_STYLES.searchIcon} />
+</div>
+<YearPicker year={selectedYear} onChange={setSelectedYear} size="small" />
+</div>
+
+<div className={DIALOG_STYLES.tableContainer}>
+<table className={DIALOG_STYLES.table}>
+<thead className={DIALOG_STYLES.tableHead}>
+<tr className={DIALOG_STYLES.headerBg}>
+{finalColumns.map((col, idx) => (
+<th
+key={col.key}
+className={`${getThClass(idx === 0, col.width || "")} text-${col.align || "center"} ${col.hiddenMobile ? "hidden md:table-cell" : ""}`}
+>
+{col.label}
 </th>
-<th className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} text-left`}>
-위험성평가명
-</th>
-<th className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} w-24 md:w-28 text-center hidden md:table-cell`}>
-등록일
-</th>
-<th className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} w-16 md:w-24 text-center`}>
-선택
-</th>
+))}
+<th className={`${getThClass(false, "w-16 md:w-24")} text-center`}>{actionLabel}</th>
 </tr>
 </thead>
-<tbody className="bg-white">
+<tbody className={DIALOG_STYLES.tableBody}>
 {paginatedList.length > 0 ? (
 paginatedList.map((item, index) => {
 const globalIndex = (currentPage - 1) * itemsPerPage + index + 1
 const isSelected = singleSelect
 ? selectedId === item.id
 : selectedIds?.includes(item.id)
+const isDisabled = typeof actionDisabled === "function" ? actionDisabled(item) : actionDisabled
 
 return (
 <tr key={item.id}>
-<td className={`border-b ${BORDER_CLASS} ${CELL_PADDING} ${TEXT_SIZE_TD} ${TEXT_PRIMARY} text-center`}>
-{globalIndex}
+{finalColumns.map((col, idx) => {
+let content: ReactNode
+if (col.render) {
+content = col.render(item, globalIndex)
+} else if (col.key === "no") {
+content = globalIndex
+} else if (col.key === "registeredAt" && !item.registeredAt) {
+content = sampleDates[index % sampleDates.length]
+} else {
+content = (item as any)[col.key]
+}
+
+const textColor = col.key === "registeredAt" ? "secondary" : "primary"
+return (
+<td
+key={col.key}
+className={`${getTdClass(idx === 0, textColor)} text-${col.align || "center"} ${col.hiddenMobile ? "hidden md:table-cell" : ""}`}
+>
+{content}
 </td>
-<td className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${CELL_PADDING} ${TEXT_SIZE_TD} ${TEXT_PRIMARY} font-normal`}>
-{item.name}
-</td>
-<td className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${CELL_PADDING} ${TEXT_SIZE_TD} ${TEXT_SECONDARY} text-center hidden md:table-cell`}>
-{sampleDates[index % sampleDates.length]}
-</td>
-<td className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} px-1 md:px-2 py-2`}>
+)
+})}
+<td className={`border-b ${DIALOG_STYLES.border} border-l ${DIALOG_STYLES.border} px-1 md:px-2 py-2`}>
 <div className="flex items-center justify-center w-full h-full">
 <Button
-variant={isSelected ? "secondary" : "action"}
-onClick={() => handleSelect(item.id)}
+variant={isSelected && !singleSelect ? "secondary" : "action"}
+onClick={() => handleSelect(item)}
 className="text-[11px] h-[26px] px-2 py-0"
+disabled={isDisabled}
 >
-{isSelected && !singleSelect ? "해제" : "선택"}
+{isSelected && !singleSelect ? "해제" : actionLabel}
 </Button>
 </div>
 </td>
@@ -135,19 +221,14 @@ className="text-[11px] h-[26px] px-2 py-0"
 })
 ) : (
 <tr>
-<td
-colSpan={4}
-className={`p-12 ${TEXT_SIZE_TD} text-gray-400 text-center`}
->
-등록된 위험성평가표가 없습니다.
-</td>
+<td colSpan={totalColSpan} className={DIALOG_STYLES.emptyStateTable}>{emptyMessage}</td>
 </tr>
 )}
 </tbody>
 </table>
 </div>
 
-<div className="flex justify-center pt-2">
+<div className={DIALOG_STYLES.footerCenter}>
 <Pagination
 currentPage={currentPage}
 totalPages={totalPages}

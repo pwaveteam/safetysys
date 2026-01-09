@@ -1,15 +1,7 @@
 import Checkbox from "@/components/common/base/Checkbox"
 import FilterBar from "@/components/common/base/FilterBar"
 import useFilterBar from "@/hooks/useFilterBar"
-
-const BORDER_CLASS = "border-[var(--border)]"
-const HEADER_BG_CLASS = "bg-[var(--neutral-bg)]"
-const TEXT_PRIMARY = "text-gray-800"
-const TEXT_SECONDARY = "text-gray-500"
-const TEXT_SIZE_TH = "text-sm"
-const TEXT_SIZE_TD = "text-xs md:text-[13px]"
-const CELL_PADDING = "px-2 md:px-4 py-2"
-const TH_PADDING = "px-2 md:px-4 py-2 md:py-3"
+import { DIALOG_STYLES, getThClass, getTdClass } from "@/components/dialog/DialogCommon"
 
 type IndustryRow = {
 id: number
@@ -56,36 +48,36 @@ onSearch={() => {}}
 />
 </div>
 
-<div className={`border ${BORDER_CLASS} rounded-lg overflow-x-auto overflow-y-auto max-h-[55vh] md:max-h-[65vh]`}>
-<table className="min-w-[1000px] w-full border-separate border-spacing-0">
-<thead className="sticky top-0 z-10">
-<tr className={HEADER_BG_CLASS}>
-<th rowSpan={2} className={`border-b ${BORDER_CLASS} border-r ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} text-center align-middle w-14`} />
-<th colSpan={4} className={`border-b ${BORDER_CLASS} border-r ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} text-center align-middle`}>산재업종분류</th>
-<th colSpan={3} className={`border-b ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} text-center align-middle`}>표준산업분류</th>
+<div className={`border ${DIALOG_STYLES.border} rounded-lg overflow-x-auto overflow-y-auto max-h-[55vh] md:max-h-[65vh]`}>
+<table className={`min-w-[1000px] ${DIALOG_STYLES.table}`}>
+<thead className={DIALOG_STYLES.tableHead}>
+<tr className={DIALOG_STYLES.headerBg}>
+<th rowSpan={2} className={`border-b ${DIALOG_STYLES.border} border-r ${DIALOG_STYLES.border} ${DIALOG_STYLES.thPadding} ${DIALOG_STYLES.textSizeTh} font-medium ${DIALOG_STYLES.textSecondary} text-center align-middle w-14`} />
+<th colSpan={4} className={`border-b ${DIALOG_STYLES.border} border-r ${DIALOG_STYLES.border} ${DIALOG_STYLES.thPadding} ${DIALOG_STYLES.textSizeTh} font-medium ${DIALOG_STYLES.textSecondary} text-center align-middle`}>산재업종분류</th>
+<th colSpan={3} className={`border-b ${DIALOG_STYLES.border} ${DIALOG_STYLES.thPadding} ${DIALOG_STYLES.textSizeTh} font-medium ${DIALOG_STYLES.textSecondary} text-center align-middle`}>표준산업분류</th>
 </tr>
-<tr className={HEADER_BG_CLASS}>
+<tr className={DIALOG_STYLES.headerBg}>
 {["대분류", "중분류", "소분류", "세부작업", "대분류", "중분류", "소분류"].map((label, i) => (
 <th
 key={i}
-className={`border-b ${BORDER_CLASS} ${i < 6 ? `border-r ${BORDER_CLASS}` : ""} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} text-center align-middle ${i < 4 ? "min-w-[140px]" : "min-w-[100px]"}`}
+className={`border-b ${DIALOG_STYLES.border} ${i < 6 ? `border-r ${DIALOG_STYLES.border}` : ""} ${DIALOG_STYLES.thPadding} ${DIALOG_STYLES.textSizeTh} font-medium ${DIALOG_STYLES.textSecondary} text-center align-middle ${i < 4 ? "min-w-[140px]" : "min-w-[100px]"}`}
 >
 {label}
 </th>
 ))}
 </tr>
 </thead>
-<tbody className="bg-white">
+<tbody className={DIALOG_STYLES.tableBody}>
 {filteredData.length > 0 ? (
 filteredData.map((row) => (
-<tr key={row.id} className="hover:bg-gray-50 transition-colors">
-<td className={`border-b ${BORDER_CLASS} border-r ${BORDER_CLASS} ${CELL_PADDING} text-center align-middle`}>
+<tr key={row.id} className={DIALOG_STYLES.tableRowHover}>
+<td className={`border-b ${DIALOG_STYLES.border} border-r ${DIALOG_STYLES.border} ${DIALOG_STYLES.cellPadding} text-center align-middle`}>
 <Checkbox checked={selectedIndustry?.id === row.id} onChange={() => handleSelect(row)} />
 </td>
 {(["main", "mid", "small", "detail", "standardMain", "standardMid", "standardSmall"] as const).map((key, i) => (
 <td
 key={i}
-className={`border-b ${BORDER_CLASS} ${i < 6 ? `border-r ${BORDER_CLASS}` : ""} ${CELL_PADDING} ${TEXT_SIZE_TD} ${TEXT_PRIMARY} text-center align-middle truncate max-w-[150px]`}
+className={`border-b ${DIALOG_STYLES.border} ${i < 6 ? `border-r ${DIALOG_STYLES.border}` : ""} ${DIALOG_STYLES.cellPadding} ${DIALOG_STYLES.textSizeTd} ${DIALOG_STYLES.textPrimary} text-center align-middle truncate max-w-[150px]`}
 title={row[key]}
 >
 {row[key]}
@@ -95,7 +87,7 @@ title={row[key]}
 ))
 ) : (
 <tr>
-<td colSpan={8} className={`p-12 ${TEXT_SIZE_TD} text-gray-400 text-center`}>
+<td colSpan={8} className={DIALOG_STYLES.emptyStateTable}>
 {searchText ? "검색 결과가 없습니다." : "등록된 업종이 없습니다."}
 </td>
 </tr>

@@ -3,8 +3,7 @@ import { X } from "lucide-react"
 import IndustrySelectDialog from "./IndustrySelectDialog"
 import IndustryTypeDialog from "./IndustryTypeDialog"
 import Button from "@/components/common/base/Button"
-
-const TEXT_PRIMARY = "text-gray-800"
+import { DIALOG_STYLES } from "@/components/dialog/DialogCommon"
 
 type IndustryStepDialogProps = {
 isOpen: boolean
@@ -46,16 +45,13 @@ setSelectedProcessIds([])
 if (!isOpen) return null
 
 return (
-<div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+<div className={DIALOG_STYLES.overlay}>
 <div className="bg-white w-full h-screen md:w-[85vw] md:h-[90vh] rounded-none md:rounded-2xl p-4 md:p-6 shadow-lg flex flex-col">
-<div className="flex items-center justify-between mb-4 shrink-0">
-<h2 className={`text-base md:text-xl font-semibold ${TEXT_PRIMARY}`}>
+<div className={DIALOG_STYLES.headerNoBorder}>
+<h2 className={DIALOG_STYLES.title}>
 {step === 1 ? "업종 선택" : "공정 선택"}
 </h2>
-<button
-onClick={handleClose}
-className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]"
->
+<button onClick={handleClose} className={DIALOG_STYLES.closeButton}>
 <X size={24} />
 </button>
 </div>
@@ -75,7 +71,7 @@ onSelectIds={setSelectedProcessIds}
 )}
 </div>
 
-<div className="mt-4 flex justify-center gap-1 shrink-0">
+<div className={DIALOG_STYLES.footerGap}>
 {step === 1 && <Button variant="primary" onClick={handleNext}>다음으로</Button>}
 {step === 2 && (
 <>

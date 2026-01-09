@@ -172,7 +172,7 @@ return (
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 <div className="bg-white rounded-none md:rounded-2xl w-full md:w-[500px] md:max-w-full p-4 md:p-6 shadow-2xl h-screen md:h-auto md:max-h-[90vh] flex flex-col overflow-y-auto">
 <div className="flex items-center justify-between mb-4 shrink-0">
-<h2 className={`text-base md:text-xl font-bold tracking-tight ${TEXT_PRIMARY}`}>결재 상세</h2>
+<h2 className={`text-lg font-semibold tracking-tight ${TEXT_PRIMARY}`}>결재 상세</h2>
 <button onClick={onClose} className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]">
 <X size={24} />
 </button>
@@ -245,7 +245,7 @@ return (
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 <div className="bg-white rounded-none md:rounded-2xl w-full md:w-[500px] md:max-w-full p-4 md:p-6 shadow-2xl h-screen md:h-auto md:max-h-[90vh] flex flex-col overflow-y-auto">
 <div className="flex items-center justify-between mb-4 shrink-0">
-<h2 className={`text-base md:text-xl font-bold tracking-tight ${TEXT_PRIMARY}`}>결재 상세</h2>
+<h2 className={`text-lg font-semibold tracking-tight ${TEXT_PRIMARY}`}>결재 상세</h2>
 <button onClick={onClose} className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]">
 <X size={24} />
 </button>

@@ -70,7 +70,7 @@ value={groupName}
 onChange={(e) => setGroupName(e.target.value)}
 onKeyDown={handleKeyDown}
 placeholder="그룹명 입력"
-className="flex-1 h-[36px] border border-[var(--border)] rounded-lg px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--secondary)]"
+className="flex-1 h-[36px] border border-[var(--border)] rounded-lg px-3 text-sm focus:outline-none focus:border-[var(--primary)]"
 />
 <Button variant="primary" onClick={handleSave} className="h-[36px]">추가</Button>
 </div>

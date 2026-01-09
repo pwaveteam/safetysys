@@ -30,10 +30,11 @@ groupFilter?: string
 onGroupFilterChange?: (value: string) => void
 groupOptions?: { value: string; label: string }[]
 onSearch: () => void
+rightContent?: React.ReactNode
 }
 
 const TEXT_CLASS = "text-gray-800"
-const INPUT_CLASS = `h-[32px] md:h-[36px] border border-[var(--border)] rounded-[8px] px-2 md:px-3 bg-white focus:outline-none focus:ring-1 focus:ring-[var(--secondary)] text-xs md:text-sm font-normal ${TEXT_CLASS} placeholder:text-gray-500`
+const INPUT_CLASS = `h-[32px] md:h-[36px] border border-[var(--border)] rounded-[8px] px-2 md:px-3 bg-white focus:outline-none focus:border-[var(--primary)] text-xs md:text-sm font-normal ${TEXT_CLASS} placeholder:text-gray-500`
 
 const courseOptions = [
 { value: "", label: "교육과정 선택" },
@@ -121,7 +122,8 @@ reportDocumentTypeOptionsList,
 groupFilter,
 onGroupFilterChange,
 groupOptions,
-onSearch
+onSearch,
+rightContent
 }) => {
 const shouldShowDate = Boolean(showDateRange && startDate !== undefined && endDate !== undefined && onStartDate && onEndDate)
 const shouldShowMonth = Boolean(showMonthPicker && selectedMonth !== undefined && onMonthChange)
@@ -148,8 +150,8 @@ const formatMonth = (monthStr: string) => {
 const hasSearchInput = (keyword !== undefined && onKeywordChange) || (searchText !== undefined && onSearchText)
 
 return (
-<section className="tbm-filter w-full flex flex-wrap items-center gap-2 px-2 md:px-3 py-2 md:py-3 mb-2 md:mb-3 bg-white border border-[var(--border)] rounded-[10px]">
-<div className="flex flex-wrap items-center gap-2 flex-grow min-w-0 w-full">
+<section className="tbm-filter w-full flex flex-wrap items-center justify-between gap-2 px-2 md:px-3 py-2 md:py-3 mb-2 md:mb-3 bg-white border border-[var(--border)] rounded-[10px]">
+<div className="flex flex-wrap items-center gap-2 min-w-0">
 {shouldShowMonth && (
 <div className="flex items-center gap-1 shrink-0">
 <button
@@ -226,6 +228,12 @@ onChange={e => { if (onKeywordChange) onKeywordChange(e.target.value); else if (
 </div>
 )}
 </div>
+
+{rightContent && (
+<div className="flex items-center shrink-0">
+{rightContent}
+</div>
+)}
 </section>
 )
 }

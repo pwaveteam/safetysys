@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react"
 import { X, RotateCcw, Upload } from "lucide-react"
+import { DIALOG_STYLES } from "./DialogCommon"
 
 interface SignaturePadDialogProps {
 isOpen: boolean
@@ -7,9 +8,6 @@ onSave: (dataUrl: string) => void
 onClose: () => void
 title?: string
 }
-
-const TEXT_PRIMARY = "text-gray-800"
-const BORDER_CLASS = "border-[var(--border)]"
 
 export default function SignaturePadDialog({ isOpen, onSave, onClose, title = "서명" }: SignaturePadDialogProps) {
 const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -131,16 +129,16 @@ onClose()
 if (!isOpen) return null
 
 return (
-<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+<div className={DIALOG_STYLES.overlay}>
 <div className="bg-white rounded-lg w-[90%] max-w-sm mx-4">
-<div className={`flex items-center justify-between p-3 border-b ${BORDER_CLASS}`}>
-<span className={`text-sm font-semibold ${TEXT_PRIMARY}`}>{title}</span>
-<button onClick={handleClose} className="p-1 hover:bg-[var(--neutral-bg)] rounded transition text-[var(--neutral)]">
+<div className={`flex items-center justify-between p-3 border-b ${DIALOG_STYLES.border}`}>
+<span className={`text-sm font-semibold ${DIALOG_STYLES.textPrimary}`}>{title}</span>
+<button onClick={handleClose} className={DIALOG_STYLES.closeButton}>
 <X size={20} />
 </button>
 </div>
 <div className="p-3">
-<div className={`relative border ${BORDER_CLASS} rounded-lg overflow-hidden bg-white`}>
+<div className={`relative border ${DIALOG_STYLES.border} rounded-lg overflow-hidden bg-white`}>
 <canvas
 ref={canvasRef}
 className="w-full h-40 touch-none cursor-crosshair"
@@ -161,15 +159,15 @@ onMouseLeave={stopDrawing}
 <button
 type="button"
 onClick={clearCanvas}
-className={`absolute top-2 right-2 p-1.5 bg-white/80 hover:bg-white rounded-md border ${BORDER_CLASS} text-gray-500 hover:text-gray-700`}
+className={`absolute top-2 right-2 p-1.5 bg-white/80 hover:bg-white rounded-md border ${DIALOG_STYLES.border} text-gray-500 hover:text-gray-700`}
 >
 <RotateCcw size={16} />
 </button>
 )}
 </div>
 </div>
-<div className={`flex gap-2 p-3 border-t ${BORDER_CLASS}`}>
-<button onClick={() => fileInputRef.current?.click()} className={`flex-1 py-2 rounded-lg border ${BORDER_CLASS} text-gray-600 text-xs font-medium flex items-center justify-center gap-1`}>
+<div className={`flex gap-2 p-3 border-t ${DIALOG_STYLES.border}`}>
+<button onClick={() => fileInputRef.current?.click()} className={`flex-1 py-2 rounded-lg border ${DIALOG_STYLES.border} text-gray-600 text-xs font-medium flex items-center justify-center gap-1`}>
 <Upload size={14} />불러오기
 </button>
 <button onClick={saveSignature} className="flex-1 py-2 rounded-lg bg-[var(--primary)] text-white text-xs font-medium">

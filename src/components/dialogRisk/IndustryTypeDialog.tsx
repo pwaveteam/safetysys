@@ -2,15 +2,7 @@ import { useState, useEffect } from "react"
 import Checkbox from "@/components/common/base/Checkbox"
 import EditableTextArea from "@/components/common/inputs/EditableTextArea"
 import { processSelectorMockData } from "@/data/mockRiskAssessmentData"
-
-const BORDER_CLASS = "border-[var(--border)]"
-const HEADER_BG_CLASS = "bg-[var(--neutral-bg)]"
-const TEXT_PRIMARY = "text-gray-800"
-const TEXT_SECONDARY = "text-gray-500"
-const TEXT_SIZE_TH = "text-sm"
-const TEXT_SIZE_TD = "text-xs md:text-[13px]"
-const CELL_PADDING = "px-2 md:px-4 py-2"
-const TH_PADDING = "px-2 md:px-4 py-2 md:py-3"
+import { DIALOG_STYLES, getThClass, getTdClass } from "@/components/dialog/DialogCommon"
 
 type IndustryTypeDialogProps = {
 industry: unknown
@@ -50,46 +42,46 @@ onSelectIds([...selectedIds, id])
 }
 
 return (
-<div className={`border ${BORDER_CLASS} rounded-lg overflow-auto max-h-[60vh] md:max-h-[72vh]`}>
-<table className="w-full border-separate border-spacing-0">
-<thead className="sticky top-0 z-10">
-<tr className={HEADER_BG_CLASS}>
-<th className={`border-b ${BORDER_CLASS} ${TH_PADDING} w-12 md:w-16 text-center`}>
+<div className={`border ${DIALOG_STYLES.border} rounded-lg overflow-auto max-h-[60vh] md:max-h-[72vh]`}>
+<table className={DIALOG_STYLES.table}>
+<thead className={DIALOG_STYLES.tableHead}>
+<tr className={DIALOG_STYLES.headerBg}>
+<th className={`border-b ${DIALOG_STYLES.border} ${DIALOG_STYLES.thPadding} w-12 md:w-16 text-center`}>
 <Checkbox checked={isAllSelected} onChange={handleSelectAll} />
 </th>
-<th className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} w-28 md:w-32 text-center`}>
+<th className={`border-b ${DIALOG_STYLES.border} border-l ${DIALOG_STYLES.border} ${DIALOG_STYLES.thPadding} ${DIALOG_STYLES.textSizeTh} font-medium ${DIALOG_STYLES.textSecondary} w-28 md:w-32 text-center`}>
 공정(작업)
 </th>
-<th className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${TH_PADDING} ${TEXT_SIZE_TH} font-medium ${TEXT_SECONDARY} text-left`}>
+<th className={`border-b ${DIALOG_STYLES.border} border-l ${DIALOG_STYLES.border} ${DIALOG_STYLES.thPadding} ${DIALOG_STYLES.textSizeTh} font-medium ${DIALOG_STYLES.textSecondary} text-left`}>
 공정 설명
 </th>
 </tr>
 </thead>
-<tbody className="bg-white">
+<tbody className={DIALOG_STYLES.tableBody}>
 {rows.length > 0 ? (
 rows.map((row) => (
-<tr key={row.id} className="hover:bg-gray-50 transition-colors">
-<td className={`border-b ${BORDER_CLASS} ${CELL_PADDING} text-center`}>
+<tr key={row.id} className={DIALOG_STYLES.tableRowHover}>
+<td className={`border-b ${DIALOG_STYLES.border} ${DIALOG_STYLES.cellPadding} text-center`}>
 <Checkbox checked={selectedIds.includes(row.id)} onChange={() => handleSelect(row.id)} />
 </td>
-<td className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${CELL_PADDING} ${TEXT_SIZE_TD} ${TEXT_PRIMARY} text-center`}>
+<td className={`border-b ${DIALOG_STYLES.border} border-l ${DIALOG_STYLES.border} ${DIALOG_STYLES.cellPadding} ${DIALOG_STYLES.textSizeTd} ${DIALOG_STYLES.textPrimary} text-center`}>
 {row.process}
 </td>
-<td className={`border-b ${BORDER_CLASS} border-l ${BORDER_CLASS} ${CELL_PADDING}`}>
+<td className={`border-b ${DIALOG_STYLES.border} border-l ${DIALOG_STYLES.border} ${DIALOG_STYLES.cellPadding}`}>
 <EditableTextArea
 value={row.description}
 onChange={(val) => handleChange(row.id, val)}
 maxLength={200}
 rows={2}
 placeholder="공정 설명을 입력하세요"
-className={TEXT_SIZE_TD}
+className={DIALOG_STYLES.textSizeTd}
 />
 </td>
 </tr>
 ))
 ) : (
 <tr>
-<td colSpan={3} className={`p-12 ${TEXT_SIZE_TD} text-gray-400 text-center`}>
+<td colSpan={3} className={DIALOG_STYLES.emptyStateTable}>
 등록된 공정이 없습니다.
 </td>
 </tr>
